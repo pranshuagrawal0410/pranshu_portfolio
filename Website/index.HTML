@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pranshu Agrawal — CA Finalist, Finance and Business Analytics</title>
+  <meta name="description" content="Portfolio of Pranshu Agrawal, a CA Finalist with experience in finance, audit, management reporting, business intelligence, and data analytics." />
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=boska@400,500,700&f[]=satoshi@400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-2: #0b1a2f;
+      --surface: rgba(10, 22, 41, 0.86);
+      --surface-2: rgba(16, 30, 53, 0.92);
+      --border: rgba(156, 181, 218, 0.18);
+      --text: #f4f7fb;
+      --muted: #b7c3d7;
+      --faint: #8493ab;
+      --primary: #6ea8ff;
+      --primary-2: #3f7ef5;
+      --primary-soft: rgba(110, 168, 255, 0.15);
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --max: 1180px;
+      --display: "Boska", Georgia, serif;
+      --body: "Satoshi", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--body);
+      background:
+        radial-gradient(circle at top left, rgba(74, 115, 204, 0.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(32, 84, 187, 0.14), transparent 24%),
+        linear-gradient(180deg, var(--bg), #050b15 100%);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    .container { width: min(calc(100% - 2rem), var(--max)); margin: 0 auto; }
+    .section { padding: 5.5rem 0; }
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.75rem;
+      color: var(--faint);
+      margin-bottom: 0.6rem;
+    }
+    .section-head {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 1.75rem;
+      margin-bottom: 1.75rem;
+      align-items: end;
+    }
+    .section-head h2, .hero h1, .card h3, .project-card h3 {
+      font-family: var(--display);
+      letter-spacing: -0.03em;
+      margin: 0;
+    }
+    .section-head h2 { font-size: clamp(1.8rem, 2vw, 2.6rem); }
+    .muted { color: var(--muted); }
+    .small { color: var(--muted); font-size: 0.96rem; }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+    }
+    
+    .modal.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      padding: 2.5rem;
+      max-width: 700px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      animation: modalSlideIn 0.3s ease-out;
+    }
+    
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: 0.2s ease;
+    }
+    
+    .modal-close:hover {
+      background: var(--primary-soft);
+      border-color: var(--border);
+    }
+    
+    .modal-title {
+      font-family: var(--display);
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      line-height: 1.3;
+    }
+    
+    .modal-date {
+      color: var(--faint);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .modal-body {
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    
+    .modal-body p {
+      margin-bottom: 1.2rem;
+    }
+    
+    .modal-body ul {
+      margin: 0.8rem 0;
+      padding-left: 1.2rem;
+    }
+    
+    .modal-body li {
+      margin-bottom: 0.5rem;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(5, 11, 21, 0.72);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.9rem 0;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+    .brand-badge {
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+      box-shadow: var(--shadow);
+      flex: none;
+    }
+
+    .menu-toggle {
+      display: none;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.7rem 0.9rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+    .nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.8rem 1rem;
+      border-radius: 999px;
+      color: var(--muted);
+      border: 1px solid transparent;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+    }
+    .nav a:hover, .nav a:focus-visible {
+      color: var(--text);
+      background: var(--primary-soft);
+      border-color: var(--border);
+    }
+    .nav i { color: var(--primary); }
+
+    .hero {
+      position: relative;
+      min-height: 88vh;
+      display: grid;
+      align-items: center;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(6, 13, 26, 0.35), rgba(6, 13, 26, 0.78)),
+        url("assets/images/cover.jpg") center/cover no-repeat;
+      opacity: 0.9;
+      z-index: -2;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(5, 11, 21, 0.20), rgba(5, 11, 21, 0.92));
+      z-index: -1;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 2rem;
+      align-items: center;
+      padding: 5rem 0 4rem;
+    }
+    .profile-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .profile-pic {
+      width: 136px;
+      height: 136px;
+      border-radius: 28px;
+      object-fit: cover;
+      border: 3px solid rgba(255,255,255,0.22);
+      box-shadow: var(--shadow);
+      background: #102038;
+    }
+    .hero h1 {
+      font-size: clamp(3rem, 6vw, 5.7rem);
+      line-height: 0.95;
+      margin: 0.1rem 0 0.8rem;
+    }
+    .hero .title {
+      font-size: clamp(1.15rem, 1.3vw, 1.6rem);
+      color: #d6e4ff;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    .hero p {
+      max-width: 62ch;
+      color: var(--muted);
+      margin: 0 0 1rem;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.95rem 1.25rem;
+      border-radius: 999px;
+      min-height: 46px;
+      font-weight: 700;
+      border: 1px solid transparent;
+      transition: 0.2s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: #08101d;
+    }
+    .btn-secondary {
+      background: rgba(255,255,255,0.04);
+      border-color: var(--border);
+      color: var(--text);
+    }
+    .btn:hover { transform: translateY(-1px); }
+
+    .hero-card, .card, .project-card, .resume-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+    .hero-card { padding: 1.4rem; }
+    .hero-stat {
+      padding: 1rem 0;
+      border-top: 1px solid var(--border);
+    }
+    .hero-stat:first-child { border-top: none; padding-top: 0; }
+    .hero-stat strong { display: block; margin-bottom: 0.25rem; }
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: 1rem;
+    }
+    .tag {
+      padding: 0.45rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      color: #d8e6ff;
+      background: rgba(110,168,255,0.12);
+      border: 1px solid rgba(110,168,255,0.18);
+    }
+
+    .grid-4, .grid-2 {
+      display: grid;
+      gap: 1rem;
+    }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .card {
+      padding: 1.4rem;
+      min-height: 100%;
+    }
+    .card h3 { font-size: 1.4rem; margin-bottom: 0.7rem; }
+    .card ul {
+      margin: 0;
+      padding-left: 1.1rem;
+      color: var(--muted);
+    }
+
+    /* Featured Projects Section */
+    .featured-projects {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    @media (max-width: 768px) {
+      .featured-projects { grid-template-columns: 1fr; }
+    }
+    .project-card {
+      padding: 1.6rem;
+      transition: 0.3s ease;
+    }
+    .project-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+    }
+    .project-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.8rem;
+      color: var(--primary);
+    }
+    .project-card .project-desc {
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+      line-height: 1.6;
+    }
+    .project-card .btn-view {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.1rem;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.9rem;
+      transition: 0.2s ease;
+    }
+    .project-card .btn-view:hover {
+      background: var(--primary);
+      color: #08101d;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+    table {
+      width: 100%;
+      min-width: 950px;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 0.9rem 0.8rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      text-align: left;
+      font-size: 0.94rem;
+    }
+    th {
+      background: var(--surface-2);
+      color: #d8e6ff;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+    tr:last-child td { border-bottom: none; }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.4rem 0.72rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .completed { background: rgba(124, 89, 255, 0.16); color: #d7c8ff; }
+    .completed .dot { background: #b89aff; }
+    .planned { background: rgba(255, 181, 73, 0.16); color: #ffd9a1; }
+    .planned .dot { background: #ffb349; }
+    .progress { background: rgba(86, 150, 255, 0.16); color: #c8deff; }
+    .progress .dot { background: #5f9dff; }
+
+    .link-btn {
+      color: #d8e6ff;
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 0.18em;
+    }
+
+    .article-list {
+      display: grid;
+      gap: 0.8rem;
+    }
+    .article-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.95rem 1rem;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      cursor: pointer;
+    }
+    .article-link:hover { background: rgba(110,168,255,0.08); }
+
+    .resume-card {
+      padding: 1rem;
+    }
+    .pdf-viewer {
+      width: 100%;
+      height: 82vh;
+      border: 0;
+      border-radius: 14px;
+      background: #0c1630;
+    }
+
+    .footer {
+      padding: 2.5rem 0 3rem;
+      color: var(--faint);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid, .section-head, .grid-2, .grid-4 { grid-template-columns: 1fr; }
+      .nav {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        margin-top: 0.8rem;
+      }
+      .nav.open { display: flex; }
+      .menu-toggle { display: inline-flex; }
+      .nav a {
+        width: 100%;
+        justify-content: flex-start;
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,0.03);
+      }
+      .hero { min-height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a class="brand" href="#home">
+        <span class="brand-badge"><i class="fa-solid fa-chart-line"></i></span>
+        <span>Pranshu Agrawal</span>
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <nav class="nav" id="siteNav" aria-label="Primary navigation">
+        <a href="#home"><i class="fa-solid fa-house"></i><span>Home</span></a>
+        <a href="#about"><i class="fa-solid fa-user"></i><span>About Me</span></a>
+        <a href="#featured"><i class="fa-solid fa-briefcase"></i><span>Featured Projects</span></a>
+        <a href="#projects"><i class="fa-solid fa-folder-open"></i><span>All Projects</span></a>
+        <a href="#insights"><i class="fa-solid fa-lightbulb"></i><span>Insights</span></a>
+        <a href="#resume"><i class="fa-solid fa-file-pdf"></i><span>Resume</span></a>
+        <a href="#contact"><i class="fa-solid fa-envelope"></i><span>Contact</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero section" id="home">
+      <div class="hero-cover-overlay"></div>
+      <div class="container hero-grid">
+        <div>
+          <div class="profile-stack">
+            <img class="profile-pic" src="assets/images/picture 2.jpeg" alt="Pranshu Agrawal profile photo" />
+            <div class="eyebrow">Finance • Analytics • Audit</div>
+          </div>
+          <h1>Pranshu Agrawal</h1>
+          <div class="title">CA Finalist, Finance and Business Analytics</div>
+          <p>Hello, I'm Pranshu Agrawal.</p>
+          <p>CA Finalist with experience in finance, audit, management reporting, business intelligence, and data analytics.</p>
+          <p>I use Power BI, Excel, SQL, and financial analysis techniques to transform business data into actionable insights.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#featured"><i class="fa-solid fa-folder-open"></i> View Projects</a>
+            <a class="btn btn-secondary" href="#resume"><i class="fa-solid fa-file-pdf"></i> View Resume</a>
+          </div>
+          <div class="tag-row">
+            <span class="tag">Power BI</span>
+            <span class="tag">Excel</span>
+            <span class="tag">SQL</span>
+            <span class="tag">FP&A</span>
+            <span class="tag">Audit</span>
+          </div>
+        </div>
+
+        <aside class="hero-card">
+          <div class="hero-stat">
+            <strong>Finance & Analysis</strong>
+            <span class="small">Financial Analysis, Budgeting & Forecasting, Variance Analysis, Management Reporting, Financial Statement Analysis.</span>
+          </div>
+          <div class="hero-stat">
+            <strong>Analytics & BI</strong>
+            <span class="small">Power BI, SQL, Power Query, Advanced Excel, Tableau.</span>
+          </div>
+          <div class="hero-stat">
+            <strong>Audit & Compliance</strong>
+            <span class="small">Statutory Audit, GST Audit, Income Tax Audit, ROC Compliance.</span>
+          </div>
+          <div class="hero-stat">
+            <strong>Accounting Systems</strong>
+            <span class="small">Zoho Books, QuickBooks, Xero, Tally Prime.</span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">About Me</div>
+            <h2>Professional background</h2>
+          </div>
+          <p></p>
+        </div>
+        <div class="grid-2">
+          <article class="card">
+            <p>I am a Chartered Accountancy Finalist and finance professional with experience across audit, financial reporting, taxation, compliance, management reporting, and business operations.</p>
+            <p>Over the past few years, I have had the opportunity to work with startups, SMEs, and established organizations, helping them strengthen financial processes, maintain compliance, and make better business decisions through accurate reporting and analysis.</p>
+            <p>My professional journey began with taxation and accounting assignments, where I developed a strong foundation in financial records, regulatory compliance, and client advisory work. As my career progressed, I gained exposure to financial reporting, statutory audits, GST and income tax audits, CMA report preparation, budgeting support, forecasting activities, and business process improvement initiatives.</p>
+          </article>
+          <article class="card">
+            <p>Alongside traditional finance responsibilities, I developed a strong interest in data analytics and business intelligence. I enjoy working with tools such as Power BI, SQL, Power Query, Advanced Excel, Zoho Books, QuickBooks, Xero, and Tally to transform complex financial and operational data into meaningful insights.</p>
+            <p>Whether it is building dashboards, identifying trends, analyzing performance, or improving reporting efficiency, I am motivated by solving business problems through a combination of finance, technology, and analytical thinking.</p>
+            <p>Today, my focus lies at the intersection of Finance and Analytics. I am continuously expanding my knowledge in financial analysis, business intelligence, forecasting, data visualization, and decision-support systems while completing my Chartered Accountancy journey.</p>
+            <p>Through this portfolio, I showcase projects, dashboards, analyses, and insights that reflect both my professional experience and my commitment to continuous learning.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="featured">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Featured Projects</div>
+            <h2>Highlighted Case Studies</h2>
+          </div>
+          <p class="muted">My primary portfolio pieces showcasing financial analysis and business intelligence expertise</p>
+        </div>
+
+        <div class="featured-projects">
+          <article class="project-card">
+            <h3>Startup Finance Reporting & MIS</h3>
+            <p class="project-desc">Revenue, Working Capital, Budget Control, Cash Runway & Startup Risk Monitoring. An Excel-based management information system for rapidly growing startups.</p>
+            <a class="btn-view" href="project-mis.html">
+              <i class="fa-solid fa-arrow-right"></i> View Case Study
+            </a>
+          </article>
+
+          <article class="project-card">
+            <h3>FP&A & Business Performance Dashboard</h3>
+            <p class="project-desc">Revenue, Profitability, Product, Customer & Cash Flow Analytics. A Power BI dashboard providing centralized business intelligence for data-driven decision making.</p>
+            <a class="btn-view" href="project-fpa.html">
+              <i class="fa-solid fa-arrow-right"></i> View Case Study
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">All Projects</div>
+            <h2>Projects Summary</h2>
+          </div>
+          <p class="muted">Complete list of finance and analytics projects</p>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Project Name</th>
+                <th>Category</th>
+                <th>Tools</th>
+                <th>Status</th>
+                <th>Key Outcome</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a class="link-btn" href="project-mis.html">Startup Finance Reporting & MIS</a></td>
+                <td>Reporting</td>
+                <td>Excel</td>
+                <td><span class="status completed"><span class="dot"></span>Completed</span></td>
+                <td>Centralized reporting solution highlighting financial trends and operational red flags for startup risk monitoring</td>
+              </tr>
+
+              <tr>
+                <td><a class="link-btn" href="project-fpa.html">FP&A & Business Performance Dashboard</a></td>
+                <td>Analytics</td>
+                <td>Power BI</td>
+                <td><span class="status completed"><span class="dot"></span>Completed</span></td>
+                <td>Consolidated BI dashboard delivering real-time insights across revenue, profitability, customers, products, and cash flows</td>
+              </tr>
+
+              <tr>
+                <td><a class="link-btn" href="project-cma.html">CMA Projection Model</a></td>
+                <td>Financial Modeling</td>
+                <td>Excel</td>
+                <td><span class="status planned"><span class="dot"></span>Planned</span></td>
+                <td>Future-state model supporting scenario planning and lender-facing credit decisions</td>
+              </tr>
+
+              <tr>
+                <td><a class="link-btn" href="project-gst.html">GST Analytics Dashboard</a></td>
+                <td>Reporting</td>
+                <td>Power BI</td>
+                <td><span class="status planned"><span class="dot"></span>Planned</span></td>
+                <td>Compliance-focused dashboard for GST liability tracking, filing trends, and mismatch detection</td>
+              </tr>
+
+              <tr>
+                <td><a class="link-btn" href="project-ar.html">Accounts Receivable Aging Analysis</a></td>
+                <td>Finance</td>
+                <td>Excel</td>
+                <td><span class="status progress"><span class="dot"></span>In Progress</span></td>
+                <td>Receivables analysis identifying overdue balances and collection risk concentration</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="insights">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Insights</div>
+            <h2>Blog and notes</h2>
+          </div>
+          <p></p>
+        </div>
+
+        <div class="article-list">
+          <div class="article-link" data-open-modal="insight-profit">
+            <span>Why Profit Can Fall Despite Rising Sales</span><span>Open</span>
+          </div>
+          <div class="article-link" data-open-modal="insight-working-capital">
+            <span>Understanding Working Capital</span><span>Open</span>
+          </div>
+          <div class="article-link" data-open-modal="insight-budget">
+            <span>Budget vs Actual Analysis</span><span>Open</span>
+          </div>
+          <div class="article-link" data-open-modal="insight-kpis">
+            <span>KPIs Every Finance Team Should Track</span><span>Open</span>
+          </div>
+          <div class="article-link" data-open-modal="insight-powerbi">
+            <span>Power BI for Finance Professionals</span><span>Open</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="resume">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Resume</div>
+            <h2>Resume PDF</h2>
+          </div>
+          <p></p>
+        </div>
+        <div class="resume-card">
+          <iframe class="pdf-viewer" src="assets/files/Pranshu_Agrawal_Resume_Financial_Analyst.pdf" title="Pranshu Agrawal Resume PDF"></iframe>
+          <div style="margin-top: 1rem;">
+            <a class="btn btn-primary" href="assets/files/Pranshu_Agrawal_Resume_Financial_Analyst.pdf" download>
+              <i class="fa-solid fa-download"></i> Download Resume
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+<!-- Add this section after your Skills section -->
+<section class="section" id="certifications">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">Certifications</div>
+        <h2>Certifications & Achievements</h2>
+      </div>
+      <p class="muted">Technical certifications and professional achievements validating my expertise</p>
+    </div>
+    <div class="grid-4">
+      <article class="card">
+        <div class="eyebrow">SQL Certification</div>
+        <h3>SQL (Advanced) - HackerRank</h3>
+        <p class="small">Advanced SQL querying, complex database operations, and data manipulation</p>
+        <a href="https://www.hackerrank.com/certificates/iframe/f44a34c142cf" class="link-btn" target="_blank">View Certificate</a>
+      </article>
+      <article class="card">
+        <div class="eyebrow">Coding Badge</div>
+        <h3>4-Star Badge - HackerRank</h3>
+        <p class="small">Demonstrated expertise in SQL through competitive programming challenges</p>
+        <a href="https://www.hackerrank.com/certificates/iframe/f44a34c142cf" class="link-btn" target="_blank">View Badge</a>
+      </article>
+      <article class="card">
+        <div class="eyebrow">PwC US</div>
+        <h3>Financial Analysis & Planning - PwC</h3>
+        <p class="small">Financial planning, analysis, and business performance management</p>
+        <a href="https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/PwC%20US/N9wYyLnaWpizw8Yjy_CA4pBqsy4b4PdyaBP_s7kywQ3bdoi59cJwq_1730026699503_completion_certificate.pdf" class="link-btn" target="_blank">View Certificate</a>
+      </article>
+      <article class="card">
+        <div class="eyebrow">KPMG USA</div>
+        <h3>Data Analytics - KPMG</h3>
+        <p class="small">Data analytics, visualization, and business insights</p>
+        <a href="https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/KPMG%20USA/AQx4i8JTDDJrMAq4F_dqdMvpBtAYYtbbNge_s7kywQ3bdoi59cJwq_1730024475104_completion_certificate.pdf" class="link-btn" target="_blank">View Certificate</a>
+      </article>
+      <article class="card">
+        <div class="eyebrow">ACCA</div>
+        <h3>Financial Reporting - ACCA</h3>
+        <p class="small">Financial reporting, accounting standards, and compliance</p>
+        <a href="https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/ACCA/uY9Mkm9Emf8frDPeb_MuLqSKBp5sav83L6j_s7kywQ3bdoi59cJwq_1730025760349_completion_certificate.pdf" class="link-btn" target="_blank">View Certificate</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+    <section class="section" id="contact">
+  <div class="container grid-2">
+    <article class="card">
+      <div class="eyebrow">Contact</div>
+      <h3>Open to opportunities</h3>
+      <p class="small">Email: <a href="mailto:pranshuagr176@gmail.com" style="color: var(--primary);">pranshuagr176@gmail.com</a></p>
+      <p class="small">LinkedIn: <a href="https://linkedin.com/in/pranshuagrawal0410" target="_blank" style="color: var(--primary);">linkedin.com/in/pranshuagrawal0410</a></p>
+      <p class="small">Location: Bhopal, Madhya Pradesh, India</p>
+    </article>
+    <article class="card">
+      <h3>Roles I'm open to</h3>
+      <ul>
+        <li>Financial Analysis Roles</li>
+        <li>FP&A Roles</li>
+        <li>Business Analytics Roles</li>
+        <li>Management Reporting Roles</li>
+        <li>Finance & Strategy Roles</li>
+      </ul>
+    </article>
+  </div>
+</section>
+  </main>
+
+  <!-- Modal -->
+  <div id="blogModal" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-date" id="modalDate"></div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">Pranshu Agrawal portfolio.</div>
+  </footer>
+
+  <script>
+    const menuToggle = document.getElementById("menuToggle");
+    const siteNav = document.getElementById("siteNav");
+    if (menuToggle && siteNav) {
+      menuToggle.addEventListener("click", () => siteNav.classList.toggle("open"));
+      siteNav.querySelectorAll("a").forEach(link => link.addEventListener("click", () => siteNav.classList.remove("open")));
+    }
+
+    // Blog content
+    const blogContent = {
+      "insight-profit": {
+        title: "Why Profit Can Fall Despite Rising Sales",
+        date: "June 15, 2026",
+        content: "<p>One of the most common misconceptions in business is that rising sales automatically mean rising profits. However, many companies experience declining profits even when their revenue is growing. Here's why:</p><ul><li><strong>Increasing COGS:</strong> Cost of Goods Sold may rise faster than revenue due to inflation, supply chain issues, or unfavorable pricing</li><li><strong>Operating Expense Growth:</strong> Marketing, sales, and administrative expenses often increase to support revenue growth</li><li><strong>Pricing Pressure:</strong> Companies may lower prices to gain market share, reducing margins</li><li><strong>Inventory Issues:</strong> Write-downs, obsolescence, or inefficient inventory management can hurt profits</li><li><strong>One-time Costs:</strong> Legal fees, restructuring costs, or system upgrades can temporarily impact profitability</li></ul><p><strong>The Solution:</strong> Focus on margin analysis, cost control, and operational efficiency alongside revenue growth strategies.</p>"
+      },
+      "insight-working-capital": {
+        title: "Understanding Working Capital",
+        date: "June 10, 2026",
+        content: "<p>Working capital is the lifeblood of any business. It represents the company's ability to pay short-term obligations and fund day-to-day operations.</p><ul><li><strong>Formula:</strong> Working Capital = Current Assets - Current Liabilities</li><li><strong>Positive Working Capital:</strong> Company can meet short-term obligations</li><li><strong>Negative Working Capital:</strong> Potential liquidity crisis</li></ul><p><strong>Key Components:</strong></p><ul><li><strong>Current Assets:</strong> Cash, accounts receivable, inventory, prepaid expenses</li><li><strong>Current Liabilities:</strong> Accounts payable, short-term debt, accrued expenses</li></ul><p><strong>Working Capital Management:</strong></p><ul><li>Optimize cash conversion cycle</li><li>Manage inventory efficiently</li><li>Accelerate receivables collection</li><li>Negotiate favorable payment terms with suppliers</li></ul>"
+      },
+      "insight-budget": {
+        title: "Budget vs Actual Analysis",
+        date: "June 5, 2026",
+        content: "<p>Budget vs Actual analysis is a critical FP&A tool that compares planned performance against actual results, helping identify variances and improve future planning.</p><p><strong>Key Steps:</strong></p><ul><li><strong>1. Collect Data:</strong> Gather budget figures and actual results for the same period</li><li><strong>2. Calculate Variances:</strong> Actual - Budget = Variance (positive or negative)</li><li><strong>3. Analyze Percentage:</strong> Variance / Budget × 100 = % Variance</li><li><strong>4. Identify Root Causes:</strong> Understand why variances occurred</li><li><strong>5. Take Action:</strong> Implement corrective measures or adjust future budgets</li></ul><p><strong>Common Variance Reasons:</strong></p><ul><li>Unrealistic budget assumptions</li><li>Market changes (economic, competitive)</li><li>Operational inefficiencies</li><li>Pricing changes</li><li>Volume fluctuations</li></ul><p><strong>Best Practice:</</strong> Review monthly, not just annually. Early variance detection enables quicker corrective action.</p>"
+      },
+      "insight-kpis": {
+        title: "KPIs Every Finance Team Should Track",
+        date: "May 28, 2026",
+        content: "<p>Key Performance Indicators (KPIs) help finance teams measure performance, identify trends, and support strategic decision-making.</p><p><strong>Essential Finance KPIs:</strong></p><ul><li><strong>Revenue Growth Rate:</strong> Month-over-month and year-over-year revenue change</li><li><strong>Net Profit Margin:</strong> Net Income / Revenue × 100</li><li><strong>Days Sales Outstanding (DSO):</strong> Average collection period for receivables</li><li><strong>Days Payable Outstanding (DPO):</strong> Average payment period to suppliers</li><li><strong>Cash Conversion Cycle:</strong> DSO + Inventory Days - DPO</li><li><strong>Current Ratio:</strong> Current Assets / Current Liabilities</li><li><li><strong>Budget Variance:</strong> % difference between budget and actual</li><li><strong>Operating Expense Ratio:</strong> OpEx / Revenue × 100</li><li><strong>EBITDA Margin:</strong> EBITDA / Revenue × 100</li></ul><p><strong>Implementation Tips:</strong></p><ul><li>Focus on 5-10 KPIs that matter most to your business</li><li>Track consistently (monthly/quarterly)</li><li>Set targets and benchmarks</li><li>Visualize in dashboards for easy monitoring</li><li>Review in finance meetings regularly</li></ul>"
+      },
+      "insight-powerbi": {
+        title: "Power BI for Finance Professionals",
+        date: "May 20, 2026",
+        content: "<p>Power BI is transforming how finance teams analyze data, create reports, and support business decisions. Here's why it's essential for modern finance professionals.</p><p><strong>Key Benefits for Finance:</strong></p><ul><li><strong>Automated Reporting:</strong> Replace manual Excel reports with automated dashboards</li><li><strong>Real-time Insights:</strong> Access live data instead of stale monthly reports</li><li><strong>Interactive Analysis:</strong> Drill down into details with click-through navigation</li><li><strong>Consolidation:</strong> Combine data from multiple sources (ERP, CRM, Excel, SQL)</li><li><strong>Forecasting:</strong> Built-in AI for predictive analytics</li></ul><p><strong>Common Finance Dashboards:</strong></p><ul><li>Revenue and Profitability Dashboard</li><li>Budget vs Actual Analysis</li><li>Cash Flow Monitoring</li><li>Working Capital Analysis</li><li>KPI Tracker</li><li>Expense Management Dashboard</li></ul><p><strong>Essential Power BI Skills for Finance:</strong></p><ul><li>DAX functions (CALCULATE, SUMX, etc.)</li><li>Data modeling and relationships</li><li>Power Query for data transformation</li><li>Time intelligence calculations</li><li>Variance analysis visuals</li></ul><p><strong>Getting Started:</strong> Start with your most time-consuming Excel report and rebuild it in Power BI.</p>"
+      }
+    };
+
+    // Modal functions
+    const modal = document.getElementById('blogModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDate = document.getElementById('modalDate');
+    const modalBody = document.getElementById('modalBody');
+
+    document.querySelectorAll('[data-open-modal]').forEach(item => {
+      item.addEventListener('click', function() {
+        const blogId = this.getAttribute('data-open-modal');
+        const blog = blogContent[blogId];
+        
+        if (blog) {
+          modalTitle.textContent = blog.title;
+          modalDate.textContent = blog.date;
+          modalBody.innerHTML = blog.content;
+          modal.classList.add('show');
+        }
+      });
+    });
+
+    function closeModal() {
+      modal.classList.remove('show');
+    }
+
+    // Close modal when clicking outside
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal.classList.contains('show')) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>

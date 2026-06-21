@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CMA Projection Model — Pranshu Agrawal</title>
+  <meta name="description" content="Case study: CMA Projection Model using Excel for credit planning and financial forecasting." />
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=boska@400,500,700&f[]=satoshi@400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-2: #0b1a2f;
+      --surface: rgba(10, 22, 41, 0.86);
+      --surface-2: rgba(16, 30, 53, 0.92);
+      --border: rgba(156, 181, 218, 0.18);
+      --text: #f4f7fb;
+      --muted: #b7c3d7;
+      --faint: #8493ab;
+      --primary: #6ea8ff;
+      --primary-2: #3f7ef5;
+      --primary-soft: rgba(110, 168, 255, 0.15);
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --max: 1180px;
+      --display: "Boska", Georgia, serif;
+      --body: "Satoshi", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--body);
+      background:
+        radial-gradient(circle at top left, rgba(74, 115, 204, 0.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(32, 84, 187, 0.14), transparent 24%),
+        linear-gradient(180deg, var(--bg), #050b15 100%);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; display: block; }
+    .container { width: min(calc(100% - 2rem), var(--max)); margin: 0 auto; }
+    .section { padding: 4rem 0; }
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.75rem;
+      color: var(--faint);
+      margin-bottom: 0.6rem;
+    }
+    .eyebrow-primary {
+      color: var(--primary);
+    }
+    h1, h2, h3, h4 {
+      font-family: var(--display);
+      letter-spacing: -0.03em;
+      margin: 0;
+    }
+    h1 { font-size: clamp(2.2rem, 4vw, 3.2rem); margin-bottom: 0.8rem; }
+    h2 { font-size: clamp(1.6rem, 2vw, 2.2rem); margin-bottom: 1rem; }
+    h3 { font-size: 1.4rem; margin-bottom: 0.7rem; }
+    .muted { color: var(--muted); }
+    .small { color: var(--muted); font-size: 0.96rem; }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(5, 11, 21, 0.72);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.9rem 0;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+    .brand-badge {
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+      box-shadow: var(--shadow);
+      flex: none;
+    }
+
+    .menu-toggle {
+      display: none;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.7rem 0.9rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+    .nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.8rem 1rem;
+      border-radius: 999px;
+      color: var(--muted);
+      border: 1px solid transparent;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+    }
+    .nav a:hover, .nav a:focus-visible {
+      color: var(--text);
+      background: var(--primary-soft);
+      border-color: var(--border);
+    }
+    .nav i { color: var(--primary); }
+
+    .project-header {
+      padding: 4rem 0 3rem;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(110,168,255,0.08), transparent);
+    }
+    .project-meta {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding: 1.2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    @media (max-width: 768px) {
+      .project-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .meta-label {
+      font-size: 0.75rem;
+      color: var(--faint);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .meta-value {
+      font-size: 0.95rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+    .tag {
+      padding: 0.45rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      color: #d8e6ff;
+      background: rgba(110,168,255,0.12);
+      border: 1px solid rgba(110,168,255,0.18);
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      padding: 1.6rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .detail-section {
+      margin-bottom: 2.5rem;
+    }
+    .detail-section h2 {
+      color: var(--primary);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.6rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .list-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    @media (max-width: 768px) {
+      .list-grid { grid-template-columns: 1fr; }
+    }
+    .list-item {
+      padding: 0.9rem 1rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .list-item strong {
+      color: var(--primary);
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+    .list-item p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin: 0;
+    }
+
+    .component-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    @media (max-width: 768px) {
+      .component-grid { grid-template-columns: 1fr; }
+    }
+    .component-card {
+      padding: 1.3rem;
+      background: rgba(110, 168, 255, 0.08);
+      border: 1px solid rgba(110, 168, 255, 0.2);
+      border-radius: var(--radius-sm);
+      text-align: center;
+    }
+    .component-card i {
+      color: var(--primary);
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+    }
+    .component-card h4 {
+      color: #d8e6ff;
+      margin-bottom: 0.5rem;
+      font-size: 1.05rem;
+    }
+    .component-card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .planning-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    @media (max-width: 768px) {
+      .planning-grid { grid-template-columns: 1fr; }
+    }
+    .planning-card {
+      padding: 1.2rem;
+      background: rgba(255, 181, 73, 0.08);
+      border: 1px solid rgba(255, 181, 73, 0.2);
+      border-radius: var(--radius-sm);
+    }
+    .planning-card h4 {
+      color: #ffd9a1;
+      margin-bottom: 0.7rem;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .planning-card h4 i {
+      color: #ffb349;
+    }
+    .planning-card ul {
+      margin: 0;
+      padding-left: 1.1rem;
+      color: var(--muted);
+    }
+    .planning-card li {
+      margin-bottom: 0.4rem;
+    }
+
+    .tools-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+    @media (max-width: 768px) {
+      .tools-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    .tool-item {
+      padding: 0.8rem 0.9rem;
+      background: rgba(110,168,255,0.08);
+      border: 1px solid rgba(110,168,255,0.18);
+      border-radius: var(--radius-sm);
+      color: #d8e6ff;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .files-list {
+      display: grid;
+      gap: 0.8rem;
+    }
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .file-item i {
+      color: var(--primary);
+      font-size: 1.4rem;
+    }
+    .file-info {
+      flex: 1;
+    }
+    .file-name {
+      color: var(--text);
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    .file-desc {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .file-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 0.9rem;
+      background: var(--primary-soft);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.88rem;
+      text-decoration: none;
+    }
+    .file-link:hover {
+      background: var(--primary);
+      color: #08101d;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 1.2rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text);
+      font-weight: 700;
+      margin-bottom: 2rem;
+      text-decoration: none;
+    }
+    .back-btn:hover {
+      background: var(--primary-soft);
+      border-color: var(--border);
+    }
+
+    .status-planned {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.2rem;
+      background: rgba(255, 181, 73, 0.12);
+      border: 1px solid rgba(255, 181, 73, 0.25);
+      border-radius: var(--radius-sm);
+      color: #ffd9a1;
+      font-weight: 600;
+      margin-bottom: 2rem;
+    }
+    .status-planned i {
+      font-size: 1.2rem;
+    }
+
+    .footer {
+      padding: 2.5rem 0 3rem;
+      color: var(--faint);
+      font-size: 0.95rem;
+      border-top: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 980px) {
+      .nav {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        margin-top: 0.8rem;
+      }
+      .nav.open { display: flex; }
+      .menu-toggle { display: inline-flex; }
+      .nav a {
+        width: 100%;
+        justify-content: flex-start;
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,0.03);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-badge"><i class="fa-solid fa-chart-line"></i></span>
+        <span>Pranshu Agrawal</span>
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <nav class="nav" id="siteNav" aria-label="Primary navigation">
+        <a href="index.html#home"><i class="fa-solid fa-house"></i><span>Home</span></a>
+        <a href="index.html#about"><i class="fa-solid fa-user"></i><span>About</span></a>
+        <a href="index.html#featured"><i class="fa-solid fa-briefcase"></i><span>Featured</span></a>
+        <a href="index.html#projects"><i class="fa-solid fa-folder-open"></i><span>Projects</span></a>
+        <a href="index.html#contact"><i class="fa-solid fa-envelope"></i><span>Contact</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="project-header">
+      <div class="container">
+        <a class="back-btn" href="index.html#projects">
+          <i class="fa-solid fa-arrow-left"></i> Back to Projects
+        </a>
+        <div class="eyebrow eyebrow-primary">Financial Modeling Project</div>
+        <h1>CMA Projection Model</h1>
+        <p class="muted" style="max-width: 70ch; margin-top: 1rem;">
+          A comprehensive Excel-based Cost and Management Accountant (CMA) projection model for credit planning, financial reporting, and future-state forecasting. Supports scenario planning and lender-facing financial projections.
+        </p>
+
+        <div class="project-meta">
+          <div class="meta-item">
+            <span class="meta-label">Category</span>
+            <span class="meta-value"><span class="tag">Financial Modeling</span></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Status</span>
+            <span class="meta-value"><span class="tag planned">Planned</span></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Tools</span>
+            <span class="meta-value"><span class="tag">Excel</span></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Type</span>
+            <span class="meta-value"><span class="tag">Credit Planning</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        
+        <div class="status-planned">
+          <i class="fa-solid fa-clock"></i>
+          <span>This project is currently in the planning phase. Content will be updated as development progresses.</span>
+        </div>
+
+        <div class="detail-section">
+          <h2>Overview</h2>
+          <p class="muted">
+            This project involves designing a future-state financial model for reporting and financing needs. The CMA (Cost and Management Accountant) projection model will provide comprehensive financial forecasting capabilities to support credit decisions and financial planning.
+          </p>
+          <p class="muted" style="margin-top: 1rem;">
+            The model will include projected income statements, balance sheets, and cash flow statements based on historical financials and strategic assumptions.
+          </p>
+        </div>
+
+        <div class="detail-section">
+          <h2>Business Problem</h2>
+          <div class="card">
+            <p style="margin-bottom: 1rem;">Organizations requiring credit funding or financial planning need:</p>
+            <ul style="margin: 0; padding-left: 1.2rem; color: var(--muted);">
+              <li style="margin-bottom: 0.5rem;">Accurate future-state financial projections for lender review</li>
+              <li style="margin-bottom: 0.5rem;">Scenario planning capabilities to evaluate different business outcomes</li>
+              <li style="margin-bottom: 0.5rem;">Comprehensive CMA reports for regulatory and financing purposes</li>
+              <li style="margin-bottom: 0.5rem;">Structured forecasting models based on historical data and assumptions</li>
+              <li style="margin-bottom: 0.5rem;">Ability to test conservative vs. aggressive business scenarios</li>
+            </ul>
+            <p style="margin-top: 1.2rem;">
+              This project was developed to address these needs by creating a structured projection model that supports credit and financial planning decisions.
+            </p>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Data Used</h2>
+          <div class="card">
+            <p style="margin-bottom: 1rem;"><strong>Source:</strong> Historical financials and business assumptions</p>
+            
+            <div class="list-grid">
+              <div class="list-item">
+                <strong>Historical Financials</strong>
+                <p>Past income statements, balance sheets, cash flows</p>
+              </div>
+              <div class="list-item">
+                <strong>Revenue Assumptions</strong>
+                <p>Growth rates, pricing assumptions, volume projections</p>
+              </div>
+              <div class="list-item">
+                <strong>Cost Assumptions</strong>
+                <p>COGS rates, operating expense projections</p>
+              </div>
+              <div class="list-item">
+                <strong>Capital Assumptions</strong>
+                <p>Working capital requirements, fixed asset plans</p>
+              </div>
+              <div class="list-item">
+                <strong>Funding Assumptions</strong>
+                <p>Debt terms, interest rates, equity plans</p>
+              </div>
+              <div class="list-item">
+                <strong>Tax Assumptions</strong>
+                <p>Tax rates, depreciation schedules</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Model Components</h2>
+          <div class="component-grid">
+            <div class="component-card">
+              <i class="fa-solid fa-file-invoice-dollar"></i>
+              <h4>Projected Income Statement</h4>
+              <p>Revenue, COGS, operating expenses, EBITDA, net income projections</p>
+            </div>
+            <div class="component-card">
+              <i class="fa-solid fa-scale-balanced"></i>
+              <h4>Projected Balance Sheet</h4>
+              <p>Assets, liabilities, equity projections with working capital</p>
+            </div>
+            <div class="component-card">
+              <i class="fa-solid fa-sack-dollar"></i>
+              <h4>Projected Cash Flow</h4>
+              <p>Operating, investing, financing cash flow projections</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Methodology / Approach</h2>
+          <div class="card">
+            <p style="margin-bottom: 1.2rem;">
+              Designed a future-state model for reporting and financing needs using structured financial modeling techniques.
+            </p>
+            <ul style="margin: 0; padding-left: 1.2rem; color: var(--muted);">
+              <li style="margin-bottom: 0.7rem;">Analyzed historical financial data to establish baseline trends</li>
+              <li style="margin-bottom: 0.7rem;">Developed revenue projection models based on growth assumptions</li>
+              <li style="margin-bottom: 0.7rem;">Built cost projection models with COGS and operating expense forecasts</li>
+              <li style="margin-bottom: 0.7rem;">Created working capital models for balance sheet projections</li>
+              <li style="margin-bottom: 0.7rem;">Integrated cash flow statements linking all three projection sheets</li>
+              <li style="margin-bottom: 0.7rem;">Implemented scenario testing for conservative vs. aggressive cases</li>
+              <li style="margin-bottom: 0.7rem;">Added sensitivity analysis for key assumptions</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Planning & Use Cases</h2>
+          <div class="planning-grid">
+            <div class="planning-card">
+              <h4><i class="fa-solid fa-piggy-bank"></i> Credit Planning</h4>
+              <ul>
+                <li>Support lender review and credit applications</li>
+                <li>Demonstrate future repayment capacity</li>
+                <li>Provide credible financial projections</li>
+              </ul>
+            </div>
+            <div class="planning-card">
+              <h4><i class="fa-solid fa-brain"></i> Scenario Planning</h4>
+              <ul>
+                <li>Test conservative assumptions</li>
+                <li>Evaluate aggressive growth scenarios</li>
+                <li>Analyze impact of assumption changes</li>
+              </ul>
+            </div>
+            <div class="planning-card">
+              <h4><i class="fa-solid fa-file-contract"></i> Regulatory Reporting</h4>
+              <ul>
+                <li>Prepare CMA reports for compliance</li>
+                <li>Support statutory filing requirements</li>
+                <li>Provide auditor-facing projections</li>
+              </ul>
+            </div>
+            <div class="planning-card">
+              <h4><i class="fa-solid fa-chess"></i> Strategic Planning</h4>
+              <ul>
+                <li>Evaluate business expansion plans</li>
+                <li>Assess funding requirements</li>
+                <li>Support investment decisions</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Key Features (Planned)</h2>
+          <div class="card">
+            <ul style="margin: 0; padding-left: 1.2rem; color: var(--muted);">
+              <li style="margin-bottom: 0.7rem;">Three-statement financial model (Income Statement, Balance Sheet, Cash Flow)</li>
+              <li style="margin-bottom: 0.7rem;">Multi-year projection capability (3-5 years typical)</li>
+              <li style="margin-bottom: 0.7rem;">Scenario comparison tables (Conservative vs. Base vs. Aggressive)</li>
+              <li style="margin-bottom: 0.7rem;">Sensitivity analysis for key variables</li>
+              <li style="margin-bottom: 0.7rem;">Automated financial ratio calculations</li>
+              <li style="margin-bottom: 0.7rem;">Debt service coverage and liquidity metrics</li>
+              <li style="margin-bottom: 0.7rem;">Professional formatting for lender presentation</li>
+              <li style="margin-bottom: 0.7rem;">Documentation of all assumptions</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Expected Key Findings</h2>
+          <div class="card">
+            <p class="muted">
+              Planned model will support scenario planning and lender review with insights including:
+            </p>
+            <ul style="margin: 0; padding-left: 1.2rem; color: var(--muted); margin-top: 1rem;">
+              <li style="margin-bottom: 0.5rem;">Projected revenue growth trajectories under different scenarios</li>
+              <li style="margin-bottom: 0.5rem;">Future profitability margins and EBITDA trends</li>
+              <li style="margin-bottom: 0.5rem;">Working capital requirements and cash conversion needs</li>
+              <li style="margin-bottom: 0.5rem;">Debt service capacity and coverage ratios</li>
+              <li style="margin-bottom: 0.5rem;">Funding requirements and capital structure implications</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Recommendations (Planned)</h2>
+          <div class="card">
+            <ul style="margin: 0; padding-left: 1.2rem; color: var(--muted);">
+              <li style="margin-bottom: 0.7rem;">Use conservative assumptions for lender-facing projections</li>
+              <li style="margin-bottom: 0.7rem;">Perform thorough scenario testing before finalizing projections</li>
+              <li style="margin-bottom: 0.7rem;">Document all assumptions clearly for audit trail</li>
+              <li style="margin-bottom: 0.7rem;">Validate projections against industry benchmarks</li>
+              <li style="margin-bottom: 0.7rem;">Update models regularly as actuals become available</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Tools Used</h2>
+          <div class="tools-list">
+            <div class="tool-item">Microsoft Excel</div>
+            <div class="tool-item">Financial Modeling</div>
+            <div class="tool-item">Projection Formulas</div>
+            <div class="tool-item">Scenario Analysis</div>
+            <div class="tool-item">Sensitivity Testing</div>
+            <div class="tool-item">Three-Statement Model</div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Files</h2>
+          <div class="card">
+            <p class="muted">
+              Files will be available when the project is completed:
+            </p>
+            <ul style="margin: 0; padding-left: 1.2rem; color: var(--muted); margin-top: 1rem;">
+              <li style="margin-bottom: 0.5rem;">CMA Projection Model Excel file</li>
+              <li style="margin-bottom: 0.5rem;">Sample projection reports</li>
+              <li style="margin-bottom: 0.5rem;">Assumption documentation</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Screenshots</h2>
+          <div class="card">
+            <p class="muted">
+              Dashboard screenshots will be added when the project is completed showing:
+            </p>
+            <ul style="margin: 0; padding-left: 1.2rem; color: var(--muted); margin-top: 1rem;">
+              <li style="margin-bottom: 0.5rem;">Projected Income Statement with trend visuals</li>
+              <li style="margin-bottom: 0.5rem;">Projected Balance Sheet with asset/liability breakdowns</li>
+              <li style="margin-bottom: 0.5rem;">Projected Cash Flow dashboard</li>
+              <li style="margin-bottom: 0.5rem;">Scenario comparison charts</li>
+              <li style="margin-bottom: 0.5rem;">Financial ratios and metrics dashboard</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>Pranshu Agrawal — CA Finalist, Finance and Business Analytics</div>
+        <div style="display: flex; gap: 1rem;">
+          <a href="index.html#contact"><i class="fa-solid fa-envelope"></i> pranshuagr176@gmail.com</a>
+          <a href="https://linkedin.com/in/pranshuagrawal0410"><i class="fa-solid fa-linkedin"></i> LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuToggle = document.getElementById("menuToggle");
+    const siteNav = document.getElementById("siteNav");
+    if (menuToggle && siteNav) {
+      menuToggle.addEventListener("click", () => siteNav.classList.toggle("open"));
+      siteNav.querySelectorAll("a").forEach(link => link.addEventListener("click", () => siteNav.classList.remove("open")));
+    }
+  </script>
+</body>
+</html>

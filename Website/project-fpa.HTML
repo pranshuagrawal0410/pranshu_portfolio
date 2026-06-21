@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FP&A & Business Performance Dashboard — Pranshu Agrawal</title>
+  <meta name="description" content="Case study: FP&A & Business Performance Dashboard using Power BI for financial planning and analysis." />
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=boska@400,500,700&f[]=satoshi@400,500,700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-2: #0b1a2f;
+      --surface: rgba(10, 22, 41, 0.86);
+      --surface-2: rgba(16, 30, 53, 0.92);
+      --border: rgba(156, 181, 218, 0.18);
+      --text: #f4f7fb;
+      --muted: #b7c3d7;
+      --faint: #8493ab;
+      --primary: #6ea8ff;
+      --primary-2: #3f7ef5;
+      --primary-soft: rgba(110, 168, 255, 0.15);
+      --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --max: 1180px;
+      --display: "Boska", Georgia, serif;
+      --body: "Satoshi", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--body);
+      background:
+        radial-gradient(circle at top left, rgba(74, 115, 204, 0.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(32, 84, 187, 0.14), transparent 24%),
+        linear-gradient(180deg, var(--bg), #050b15 100%);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; display: block; }
+    .container { width: min(calc(100% - 2rem), var(--max)); margin: 0 auto; }
+    .section { padding: 4rem 0; }
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.75rem;
+      color: var(--faint);
+      margin-bottom: 0.6rem;
+    }
+    .eyebrow-primary {
+      color: var(--primary);
+    }
+    h1, h2, h3, h4 {
+      font-family: var(--display);
+      letter-spacing: -0.03em;
+      margin: 0;
+    }
+    h1 { font-size: clamp(2.2rem, 4vw, 3.2rem); margin-bottom: 0.8rem; }
+    h2 { font-size: clamp(1.6rem, 2vw, 2.2rem); margin-bottom: 1rem; }
+    h3 { font-size: 1.4rem; margin-bottom: 0.7rem; }
+    .muted { color: var(--muted); }
+    .small { color: var(--muted); font-size: 0.96rem; }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(5, 11, 21, 0.72);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.9rem 0;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+    .brand-badge {
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: white;
+      box-shadow: var(--shadow);
+      flex: none;
+    }
+
+    .menu-toggle {
+      display: none;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.7rem 0.9rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+    .nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.8rem 1rem;
+      border-radius: 999px;
+      color: var(--muted);
+      border: 1px solid transparent;
+      transition: 0.2s ease;
+      font-size: 0.95rem;
+    }
+    .nav a:hover, .nav a:focus-visible {
+      color: var(--text);
+      background: var(--primary-soft);
+      border-color: var(--border);
+    }
+    .nav i { color: var(--primary); }
+
+    .project-header {
+      padding: 4rem 0 3rem;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(110,168,255,0.08), transparent);
+    }
+    .project-meta {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding: 1.2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    @media (max-width: 768px) {
+      .project-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .meta-label {
+      font-size: 0.75rem;
+      color: var(--faint);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .meta-value {
+      font-size: 0.95rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+    .tag {
+      padding: 0.45rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      color: #d8e6ff;
+      background: rgba(110,168,255,0.12);
+      border: 1px solid rgba(110,168,255,0.18);
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      padding: 1.6rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .detail-section {
+      margin-bottom: 2.5rem;
+    }
+    .detail-section h2 {
+      color: var(--primary);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.6rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .list-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    @media (max-width: 768px) {
+      .list-grid { grid-template-columns: 1fr; }
+    }
+    .list-item {
+      padding: 0.9rem 1rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .list-item strong {
+      color: var(--primary);
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+    .list-item p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin: 0;
+    }
+
+    .analysis-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    @media (max-width: 768px) {
+      .analysis-grid { grid-template-columns: 1fr; }
+    }
+    .analysis-card {
+      padding: 1.3rem;
+      background: rgba(110, 168, 255, 0.08);
+      border: 1px solid rgba(110, 168, 255, 0.2);
+      border-radius: var(--radius-sm);
+    }
+    .analysis-card h4 {
+      color: #d8e6ff;
+      margin-bottom: 0.8rem;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .analysis-card h4 i {
+      color: var(--primary);
+    }
+    .analysis-card ul {
+      margin: 0;
+      padding-left: 1.1rem;
+      color: var(--muted);
+    }
+    .analysis-card li {
+      margin-bottom: 0.4rem;
+    }
+
+    .findings-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+    @media (max-width: 768px) {
+      .findings-grid { grid-template-columns: 1fr; }
+    }
+    .finding-card {
+      padding: 1.2rem;
+      background: rgba(124, 89, 255, 0.08);
+      border: 1px solid rgba(124, 89, 255, 0.2);
+      border-radius: var(--radius-sm);
+    }
+    .finding-card strong {
+      color: #d7c8ff;
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 1.05rem;
+    }
+    .finding-card p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin: 0;
+    }
+
+    .recommendations-list {
+      display: grid;
+      gap: 1rem;
+    }
+    .rec-item {
+      padding: 1.2rem;
+      background: rgba(86, 150, 255, 0.08);
+      border: 1px solid rgba(86, 150, 255, 0.2);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .rec-item i {
+      color: #c8deff;
+      font-size: 1.5rem;
+      flex: none;
+    }
+    .rec-item strong {
+      color: #c8deff;
+      display: block;
+      margin-bottom: 0.3rem;
+      font-size: 1.1rem;
+    }
+    .rec-item p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin: 0;
+    }
+
+    .tools-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.8rem;
+    }
+    @media (max-width: 768px) {
+      .tools-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    .tool-item {
+      padding: 0.8rem 0.9rem;
+      background: rgba(110,168,255,0.08);
+      border: 1px solid rgba(110,168,255,0.18);
+      border-radius: var(--radius-sm);
+      color: #d8e6ff;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .files-list {
+      display: grid;
+      gap: 0.8rem;
+    }
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .file-item i {
+      color: var(--primary);
+      font-size: 1.4rem;
+    }
+    .file-info {
+      flex: 1;
+    }
+    .file-name {
+      color: var(--text);
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    .file-desc {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .file-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 0.9rem;
+      background: var(--primary-soft);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.88rem;
+      text-decoration: none;
+    }
+    .file-link:hover {
+      background: var(--primary);
+      color: #08101d;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 1.2rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text);
+      font-weight: 700;
+      margin-bottom: 2rem;
+      text-decoration: none;
+    }
+    .back-btn:hover {
+      background: var(--primary-soft);
+      border-color: var(--border);
+    }
+
+    .footer {
+      padding: 2.5rem 0 3rem;
+      color: var(--faint);
+      font-size: 0.95rem;
+      border-top: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+
+    @media (max-width: 980px) {
+      .nav {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        margin-top: 0.8rem;
+      }
+      .nav.open { display: flex; }
+      .menu-toggle { display: inline-flex; }
+      .nav a {
+        width: 100%;
+        justify-content: flex-start;
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,0.03);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-badge"><i class="fa-solid fa-chart-line"></i></span>
+        <span>Pranshu Agrawal</span>
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <nav class="nav" id="siteNav" aria-label="Primary navigation">
+        <a href="index.html#home"><i class="fa-solid fa-house"></i><span>Home</span></a>
+        <a href="index.html#about"><i class="fa-solid fa-user"></i><span>About</span></a>
+        <a href="index.html#featured"><i class="fa-solid fa-briefcase"></i><span>Featured</span></a>
+        <a href="index.html#projects"><i class="fa-solid fa-folder-open"></i><span>Projects</span></a>
+        <a href="index.html#contact"><i class="fa-solid fa-envelope"></i><span>Contact</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="project-header">
+      <div class="container">
+        <a class="back-btn" href="index.html#featured">
+          <i class="fa-solid fa-arrow-left"></i> Back to Projects
+        </a>
+        <div class="eyebrow eyebrow-primary">Featured Project</div>
+        <h1>FP&A & Business Performance Dashboard</h1>
+        <p class="muted" style="max-width: 70ch; margin-top: 1rem;">
+          A Power BI dashboard providing centralized business intelligence for financial planning and analysis. Delivers comprehensive insights across revenue, profitability, products, customers, regions, and cash flows for data-driven decision making.
+        </p>
+
+        <div class="project-meta">
+          <div class="meta-item">
+            <span class="meta-label">Category</span>
+            <span class="meta-value"><span class="tag">Analytics</span></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Status</span>
+            <span class="meta-value"><span class="tag completed">Completed</span></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Tools</span>
+            <span class="meta-value"><span class="tag">Power BI</span></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Type</span>
+            <span class="meta-value"><span class="tag">Business Intelligence</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        
+        <div class="detail-section">
+          <h2>Overview</h2>
+          <p class="muted">
+            This project analyzes business performance across revenue, profitability, customer segments, products, regions, and cash flows. The dashboard was developed to provide management with a consolidated view of financial performance and support data-driven decision making.
+          </p>
+          <p class="muted" style="margin-top: 1rem;">
+            Management required a centralized Business Intelligence (BI) Dashboard to consolidate fragmented financial and operational data into a single source of truth. This solution automates data ingestion from ERP, CRM, and accounting systems to deliver real-time, actionable insights.
+          </p>
+        </div>
+
+        <div class="detail-section">
+          <h2>Business Problem</h2>
+          <div class="card">
+            <p style="margin-bottom: 1rem;">Management required a centralized reporting solution to:</p>
+            <ul style="margin: 0; padding-left: 1.2rem; color: var(--muted);">
+              <li style="margin-bottom: 0.5rem;">Monitor revenue and profitability trends</li>
+              <li style="margin-bottom: 0.5rem;">Track customer and product performance</li>
+              <li style="margin-bottom: 0.5rem;">Analyze regional sales contribution</li>
+              <li style="margin-bottom: 0.5rem;">Review cash flow movements</li>
+              <li style="margin-bottom: 0.5rem;">Compare actual performance against business targets</li>
+            </ul>
+            <p style="margin-top: 1.2rem;">
+              Without a consolidated dashboard, decision-makers struggled with fragmented data sources, delayed reporting, and inability to quickly identify performance trends and anomalies across the business.
+            </p>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Data Used</h2>
+          <div class="card">
+            <p style="margin-bottom: 1rem;"><strong>Source:</strong> Simulated business dataset created for FP&A and business intelligence reporting purposes</p>
+            <p style="margin-bottom: 1rem;"><strong>Coverage Period:</strong> 24 months of data</p>
+            
+            <div class="list-grid">
+              <div class="list-item">
+                <strong>Sales Transactions</strong>
+                <p>25,000+ sales records</p>
+              </div>
+              <div class="list-item">
+                <strong>Customers</strong>
+                <p>500 customer master records</p>
+              </div>
+              <div class="list-item">
+                <strong>Products</strong>
+                <p>200 products across categories</p>
+              </div>
+              <div class="list-item">
+                <strong>Regions</strong>
+                <p>4 business regions</p>
+              </div>
+              <div class="list-item">
+                <strong>Budget Data</strong>
+                <p>24 months of budget targets</p>
+              </div>
+              <div class="list-item">
+                <strong>Cash Flow</strong>
+                <p>Operating, investing, financing cash flows</p>
+              </div>
+              <div class="list-item">
+                <strong>Calendar</strong>
+                <p>Dimension table for time analysis</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Approach / Methodology</h2>
+          <div class="card">
+            <p style="margin-bottom: 1.2rem;">
+              This project analyzes business performance across revenue, profitability, customer segments, products, regions, and cash flows. The dashboard was developed to provide management with a consolidated view of financial performance and support data-driven decision making.
+            </p>
+            <ul style="margin: 0; padding-left: 1.2rem; color: var(--muted);">
+              <li style="margin-bottom: 0.7rem;">Built data model connecting Sales, Customer, Product, Budget, and Cash Flow tables</li>
+              <li style="margin-bottom: 0.7rem;">Used Power Query for data cleaning, transformation, and integration</li>
+              <li style="margin-bottom: 0.7rem;">Developed DAX measures for KPIs including revenue, profit margins, variance calculations</li>
+              <li style="margin-bottom: 0.7rem;">Created interactive dashboards with KPI cards, trend visuals, and dynamic filters</li>
+              <li style="margin-bottom: 0.7rem;">Implemented drill-through functionality for detailed analysis</li>
+              <li style="margin-bottom: 0.7rem;">Added time intelligence for year-over-year and month-over-month comparisons</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Analysis Performed</h2>
+          <div class="analysis-grid">
+            <div class="analysis-card">
+              <h4><i class="fa-solid fa-chart-line"></i> Revenue Analysis</h4>
+              <ul>
+                <li>Revenue Trend Analysis</li>
+                <li>Regional Revenue Comparison</li>
+                <li>Category-wise Revenue Contribution</li>
+                <li>Customer Segment Revenue Analysis</li>
+              </ul>
+            </div>
+            <div class="analysis-card">
+              <h4><i class="fa-solid fa-coins"></i> Profitability Analysis</h4>
+              <ul>
+                <li>Gross Profit Calculation</li>
+                <li>Profit Margin Analysis</li>
+                <li>Category Profitability Assessment</li>
+                <li>Product Performance Evaluation</li>
+              </ul>
+            </div>
+            <div class="analysis-card">
+              <h4><i class="fa-solid fa-users"></i> Customer Analysis</h4>
+              <ul>
+                <li>Customer Segmentation Analysis</li>
+                <li>Revenue Contribution by Segment</li>
+                <li>Top Customer Identification</li>
+                <li>Customer Concentration Assessment</li>
+              </ul>
+            </div>
+            <div class="analysis-card">
+              <h4><i class="fa-solid fa-box"></i> Product Analysis</h4>
+              <ul>
+                <li>Top-performing Products</li>
+                <li>Category Performance Comparison</li>
+                <li>Subcategory Contribution Analysis</li>
+                <li>Product Profitability Review</li>
+              </ul>
+            </div>
+            <div class="analysis-card">
+              <h4><i class="fa-solid fa-balance-scale"></i> Budget & Variance</h4>
+              <ul>
+                <li>Actual vs Budget Comparison</li>
+                <li>Revenue Variance Calculation</li>
+                <li>Budget Attainment Tracking</li>
+                <li>Regional Performance Against Targets</li>
+              </ul>
+            </div>
+            <div class="analysis-card">
+              <h4><i class="fa-solid fa-sack-dollar"></i> Cash Flow Analysis</h4>
+              <ul>
+                <li>Operating Cash Flow Trends</li>
+                <li>Investing Cash Flow Review</li>
+                <li>Financing Cash Flow Analysis</li>
+                <li>Overall Liquidity Assessment</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Key Findings</h2>
+          <div class="findings-grid">
+            <div class="finding-card">
+              <strong>Consistent Revenue Growth</strong>
+              <p>Revenue showed consistent growth throughout the reporting period, indicating strong business performance and market demand.</p>
+            </div>
+            <div class="finding-card">
+              <strong>West Region Leadership</strong>
+              <p>West region generated the highest revenue, demonstrating superior regional performance and market penetration.</p>
+            </div>
+            <div class="finding-card">
+              <strong>Technology Product Strength</strong>
+              <p>Technology products delivered the strongest profitability, highlighting high-margin product opportunities.</p>
+            </div>
+            <div class="finding-card">
+              <strong>Corporate Customer Dominance</strong>
+              <p>Corporate customers contributed the largest revenue share, indicating enterprise relationship value.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Recommendations</h2>
+          <div class="recommendations-list">
+            <div class="rec-item">
+              <i class="fa-solid fa-arrow-trend-up"></i>
+              <div>
+                <strong>Focus on High-Margin Categories</strong>
+                <p>Aggressively scale technology products and high-margin segments to drive immediate profitability improvements</p>
+              </div>
+            </div>
+            <div class="rec-item">
+              <i class="fa-solid fa-map-location-dot"></i>
+              <div>
+                <strong>Improve Underperforming Regions</strong>
+                <p>Address regional performance gaps by fixing leaks in weaker regions while maintaining West region strength</p>
+              </div>
+            </div>
+            <div class="rec-item">
+              <i class="fa-solid fa-handshake"></i>
+              <div>
+                <strong>Strengthen Customer Retention Programs</strong>
+                <p>Enhance retention for corporate customers who drive the largest revenue share to secure long-term stability</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Tools Used</h2>
+          <div class="tools-list">
+            <div class="tool-item">Power BI</div>
+            <div class="tool-item">Power Query</div>
+            <div class="tool-item">DAX</div>
+            <div class="tool-item">Excel</div>
+            <div class="tool-item">Data Modeling</div>
+            <div class="tool-item">Interactive Dashboards</div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Files</h2>
+          <div class="files-list">
+            <div class="file-item">
+              <i class="fa-solid fa-file-powerpoint"></i>
+              <div class="file-info">
+                <div class="file-name">PFA_BUSINESS_DASHBOARD.pbix</div>
+                <div class="file-desc">Complete Power BI dashboard file with all visuals, measures, and data model</div>
+              </div>
+              <a class="file-link" href="assets/files/PFA_BUSINESS_DASHBOARD.pbix" download>
+                <i class="fa-solid fa-download"></i> Download
+              </a>
+            </div>
+            <div class="file-item">
+              <i class="fa-solid fa-file-excel"></i>
+              <div class="file-info">
+                <div class="file-name">PFA_BUSINESS_DASHBOARD_DATABASE.xlsx</div>
+                <div class="file-desc">Source database with all transactions, masters, and budget data</div>
+              </div>
+              <a class="file-link" href="assets/files/PFA_BUSINESS_DASHBOARD_DATABASE.xlsx" download>
+                <i class="fa-solid fa-download"></i> Download
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h2>Screenshots</h2>
+          <div class="card">
+            <p class="muted">Dashboard screenshots will be added here showing:</p>
+            <ul style="margin: 0; padding-left: 1.2rem; color: var(--muted); margin-top: 1rem;">
+              <li style="margin-bottom: 0.5rem;">Executive Summary Dashboard with KPI cards</li>
+              <li style="margin-bottom: 0.5rem;">Revenue Trend Analysis with regional breakdown</li>
+              <li style="margin-bottom: 0.5rem;">Profitability Dashboard by product and category</li>
+              <li style="margin-bottom: 0.5rem;">Customer Segment Analysis dashboard</li>
+              <li style="margin-bottom: 0.5rem;">Budget vs Actual Variance Dashboard</li>
+              <li style="margin-bottom: 0.5rem;">Cash Flow Analysis Dashboard</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>Pranshu Agrawal — CA Finalist, Finance and Business Analytics</div>
+        <div style="display: flex; gap: 1rem;">
+          <a href="index.html#contact"><i class="fa-solid fa-envelope"></i> pranshuagr176@gmail.com</a>
+          <a href="https://linkedin.com/in/pranshuagrawal0410"><i class="fa-solid fa-linkedin"></i> LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuToggle = document.getElementById("menuToggle");
+    const siteNav = document.getElementById("siteNav");
+    if (menuToggle && siteNav) {
+      menuToggle.addEventListener("click", () => siteNav.classList.toggle("open"));
+      siteNav.querySelectorAll("a").forEach(link => link.addEventListener("click", () => siteNav.classList.remove("open")));
+    }
+  </script>
+</body>
+</html>
