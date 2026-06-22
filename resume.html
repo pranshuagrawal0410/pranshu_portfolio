@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resume — Pranshu Agrawal</title>
+  <meta
+    name="description"
+    content="Resume of Pranshu Agrawal, Financial Analyst and CA Finalist with expertise in audit, financial analysis, MIS, Power BI, SQL, and management reporting."
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap"
+    rel="stylesheet"
+  />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ============================================
+       RESUME PAGE STYLES
+       ============================================ */
+
+    /* Wider max-width for resume page only */
+    .resume-wrap {
+      width: min(calc(100% - 40px), 1400px);
+      margin-inline: auto;
+    }
+
+    /* ---- Page top strip ---- */
+    .resume-top-strip {
+      padding-block: clamp(32px, 5vw, 60px);
+      border-bottom: 1px solid var(--divider);
+      background: var(--surface);
+    }
+
+    .resume-top-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .resume-top-title h1 {
+      font-size: var(--text-xl);
+      margin-bottom: 4px;
+    }
+
+    .resume-top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    /* ---- PDF section (full width, prominent) ---- */
+    .resume-pdf-section {
+      padding-block: clamp(28px, 4vw, 52px);
+    }
+
+    .resume-pdf-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .resume-pdf-wrap {
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      background: var(--surface-2);
+      box-shadow: var(--shadow-md);
+    }
+
+    .resume-pdf-wrap iframe {
+      display: block;
+      width: 100%;
+      height: 960px;
+      border: none;
+    }
+
+    /* ---- Profile card (below PDF) ---- */
+    .resume-profile-section {
+      padding-top: 0;
+      padding-bottom: clamp(24px, 4vw, 48px);
+    }
+
+    .resume-profile-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: clamp(22px, 3.5vw, 36px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .resume-profile-inner {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .resume-avatar {
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--border-strong);
+      box-shadow: var(--shadow-md);
+      flex-shrink: 0;
+    }
+
+    .resume-profile-contact {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .resume-contact-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: var(--r-pill);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text);
+      font-size: var(--text-sm);
+      transition: background var(--ease), border-color var(--ease), transform var(--ease);
+    }
+
+    .resume-contact-pill:hover {
+      background: var(--surface-3);
+      border-color: color-mix(in srgb, var(--primary) 24%, var(--border));
+      transform: translateY(-2px);
+      color: var(--text);
+    }
+
+    .resume-contact-pill i {
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    /* Divider in profile card */
+    .resume-profile-divider {
+      height: 1px;
+      background: var(--divider);
+      margin-block: 20px;
+    }
+
+    /* ---- Detail sections (skills, experience, education) ---- */
+    .resume-detail-section {
+      padding-top: 0;
+      padding-bottom: clamp(24px, 4vw, 48px);
+    }
+
+    .resume-detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* Chip grid for skills */
+    .skill-chip-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .skill-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      border-radius: var(--r-pill);
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      font-size: var(--text-xs);
+      font-weight: 500;
+      color: var(--text-muted);
+      white-space: nowrap;
+      transition: background var(--ease), border-color var(--ease), color var(--ease);
+    }
+
+    .skill-chip:hover {
+      background: var(--primary-soft);
+      border-color: color-mix(in srgb, var(--primary) 28%, transparent);
+      color: var(--primary);
+    }
+
+    .skill-chip.primary {
+      background: var(--primary-soft);
+      color: var(--primary);
+      border-color: color-mix(in srgb, var(--primary) 24%, transparent);
+    }
+
+    /* Resume bullet list */
+    .resume-bullets {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .resume-bullets li {
+      position: relative;
+      padding-left: 16px;
+      color: var(--text-muted);
+      font-size: var(--text-sm);
+      line-height: 1.65;
+    }
+
+    .resume-bullets li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* Experience cards */
+    .exp-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .exp-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 22px 24px;
+      transition: border-color var(--ease), box-shadow var(--ease), transform var(--ease);
+    }
+
+    .exp-card:hover {
+      border-color: color-mix(in srgb, var(--primary) 26%, var(--border));
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-2px);
+    }
+
+    .exp-meta {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 20px;
+      align-items: start;
+      margin-bottom: 12px;
+    }
+
+    .exp-date {
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-faint);
+      padding-top: 5px;
+    }
+
+    .exp-title {
+      font-size: var(--text-lg);
+      margin-bottom: 3px;
+      color: var(--text);
+    }
+
+    .exp-company {
+      display: block;
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    /* Education cards */
+    .edu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .edu-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 22px;
+    }
+
+    .edu-card h4 {
+      font-size: var(--text-lg);
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    /* Footer */
+    .site-footer {
+      padding-block: 26px;
+      border-top: 1px solid var(--divider);
+      font-size: var(--text-sm);
+      color: var(--text-faint);
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 900px) {
+      .resume-profile-inner {
+        grid-template-columns: auto 1fr;
+        gap: 16px;
+      }
+
+      .resume-profile-contact {
+        grid-column: 1 / -1;
+      }
+
+      .resume-detail-grid,
+      .edu-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .resume-profile-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .resume-avatar {
+        width: 60px;
+        height: 60px;
+      }
+
+      .exp-meta {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+
+      .resume-pdf-wrap iframe {
+        height: 520px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================
+       HEADER
+       ========================= -->
+  <header class="site-header">
+    <nav class="navbar" aria-label="Resume page navigation">
+      <div class="wrap d-flex justify-content-between align-items-center gap-3">
+
+        <a class="navbar-brand" href="index.html">
+          <span class="brand-logo" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+          </span>
+          Pranshu Agrawal
+        </a>
+
+        <div class="d-flex align-items-center gap-2">
+          <a class="btn-outline-swiss btn-sm-swiss" href="index.html">
+            <i class="bi bi-arrow-left"></i> Back home
+          </a>
+          <a class="btn-swiss btn-sm-swiss" href="assets/resume.pdf" target="_blank" rel="noopener noreferrer">
+            <i class="bi bi-download"></i> Download PDF
+          </a>
+          <button class="theme-btn" type="button" data-theme-toggle aria-label="Toggle theme">
+            <i class="bi bi-moon-stars-fill"></i>
+          </button>
+        </div>
+
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- =========================
+         TOP STRIP
+         ========================= -->
+    <div class="resume-top-strip">
+      <div class="resume-wrap">
+        <div class="resume-top-inner">
+          <div class="resume-top-title">
+            <span class="kicker">Resume</span>
+            <h1>Pranshu Agrawal — Financial Analyst</h1>
+            <p style="margin-bottom:0; color:var(--text-muted); font-size:var(--text-sm);">
+              CA Finalist &nbsp;·&nbsp; Audit &nbsp;·&nbsp; Financial Reporting &nbsp;·&nbsp; Business Intelligence
+            </p>
+          </div>
+
+          <div class="resume-top-actions">
+            <a class="btn-swiss" href="assets/resume.pdf" target="_blank" rel="noopener noreferrer">
+              <i class="bi bi-download"></i> Download PDF
+            </a>
+            <a class="btn-outline-swiss" href="https://linkedin.com/in/pranshuagrawal0410" target="_blank" rel="noopener noreferrer">
+              <i class="bi bi-linkedin"></i> LinkedIn
+            </a>
+            <a class="btn-outline-swiss" href="mailto:Pranshuagr176@gmail.com">
+              <i class="bi bi-envelope"></i> Email
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================
+         PDF PREVIEW — full width, top
+         ========================= -->
+    <section class="resume-pdf-section">
+      <div class="resume-wrap">
+
+        <div class="resume-pdf-header">
+          <div>
+            <span class="label-sm">Document preview</span>
+            <h2 class="heading-lg mt-2">Resume PDF</h2>
+          </div>
+          <a class="btn-swiss" href="assets/resume.pdf" target="_blank" rel="noopener noreferrer">
+            <i class="bi bi-box-arrow-up-right"></i> Open full PDF
+          </a>
+        </div>
+
+        <div class="resume-pdf-wrap">
+          <iframe
+            src="assets/resume.pdf"
+            title="Pranshu Agrawal Resume PDF"
+            aria-label="Pranshu Agrawal Resume PDF preview">
+          </iframe>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================
+         PROFILE CARD — below PDF
+         ========================= -->
+    <section class="resume-profile-section">
+      <div class="resume-wrap">
+
+        <div class="resume-profile-card">
+          <div class="resume-profile-inner">
+
+            <img
+              src="assets/portrait.jpeg"
+              alt="Pranshu Agrawal"
+              class="resume-avatar"
+              width="78"
+              height="78"
+              loading="lazy"
+            />
+
+            <div>
+              <span class="label-sm">Profile</span>
+              <h2 class="heading-lg mt-1">Pranshu Agrawal</h2>
+              <p style="color:var(--text-muted); font-size:var(--text-sm); margin-bottom:0;">
+                Financial Analyst &nbsp;·&nbsp; CA Finalist &nbsp;·&nbsp; Audit &nbsp;·&nbsp; Reporting &nbsp;·&nbsp; Analytics
+              </p>
+            </div>
+
+            <a
+              class="btn-outline-swiss btn-sm-swiss"
+              href="index.html#contact"
+            >
+              <i class="bi bi-envelope"></i> Get in touch
+            </a>
+
+          </div>
+
+          <div class="resume-profile-divider"></div>
+
+          <p style="margin-bottom:16px; color:var(--text-muted); font-size:var(--text-sm); max-width:none; line-height:1.75;">
+            Finance professional and CA Finalist with 3 years of experience in financial analysis,
+            statutory audit, and business intelligence. Strong capability in budgeting, forecasting,
+            variance analysis, management reporting, and financial modeling support, backed by
+            hands-on expertise in SQL, Power BI, Power Query, and Advanced Excel. Experienced in
+            building dashboards, automating reconciliations, preparing CMA reports, and converting
+            financial data into decision-ready insights for management and lenders.
+          </p>
+
+          <div class="resume-profile-contact">
+            <a class="resume-contact-pill" href="tel:+919131618323">
+              <i class="bi bi-telephone-fill"></i>
+              <span>+91 9131618323</span>
+            </a>
+            <a class="resume-contact-pill" href="mailto:Pranshuagr176@gmail.com">
+              <i class="bi bi-envelope-fill"></i>
+              <span>Pranshuagr176@gmail.com</span>
+            </a>
+            <a class="resume-contact-pill" href="https://linkedin.com/in/pranshuagrawal0410" target="_blank" rel="noopener noreferrer">
+              <i class="bi bi-linkedin"></i>
+              <span>linkedin.com/in/pranshuagrawal0410</span>
+            </a>
+            <div class="resume-contact-pill" style="cursor:default;">
+              <i class="bi bi-globe"></i>
+              <span>Myportfoliowebsite.com</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================
+         SKILLS SNAPSHOT
+         ========================= -->
+    <section class="resume-detail-section">
+      <div class="resume-wrap">
+
+        <span class="kicker mb-4">Skills snapshot</span>
+
+        <div class="card-swiss mt-4">
+          <div class="d-flex flex-column gap-5">
+
+            <div>
+              <p class="label-sm mb-3">Financial Analysis</p>
+              <div class="skill-chip-grid">
+                <span class="skill-chip primary">Budgeting</span>
+                <span class="skill-chip primary">Forecasting</span>
+                <span class="skill-chip primary">Variance Analysis</span>
+                <span class="skill-chip primary">Management Reporting</span>
+                <span class="skill-chip primary">Financial Modeling</span>
+                <span class="skill-chip primary">CMA Reports</span>
+              </div>
+            </div>
+
+            <div>
+              <p class="label-sm mb-3">Reporting & MIS</p>
+              <div class="skill-chip-grid">
+                <span class="skill-chip">MIS Reporting</span>
+                <span class="skill-chip">KPI Reporting</span>
+                <span class="skill-chip">Dashboard Reporting</span>
+                <span class="skill-chip">Trend Analysis</span>
+              </div>
+            </div>
+
+            <div>
+              <p class="label-sm mb-3">Data & Business Intelligence</p>
+              <div class="skill-chip-grid">
+                <span class="skill-chip"><i class="bi bi-bar-chart-fill" style="color:var(--primary);"></i> Power BI</span>
+                <span class="skill-chip"><i class="bi bi-database" style="color:var(--primary);"></i> SQL</span>
+                <span class="skill-chip"><i class="bi bi-funnel" style="color:var(--primary);"></i> Power Query</span>
+                <span class="skill-chip"><i class="bi bi-file-earmark-spreadsheet" style="color:var(--primary);"></i> Advanced Excel</span>
+                <span class="skill-chip">Tableau</span>
+              </div>
+            </div>
+
+            <div>
+              <p class="label-sm mb-3">Accounting Systems</p>
+              <div class="skill-chip-grid">
+                <span class="skill-chip">Zoho Books</span>
+                <span class="skill-chip">QuickBooks</span>
+                <span class="skill-chip">Xero</span>
+                <span class="skill-chip">Tally ERP 9</span>
+              </div>
+            </div>
+
+            <div>
+              <p class="label-sm mb-3">Audit & Compliance</p>
+              <div class="skill-chip-grid">
+                <span class="skill-chip">Statutory Audit</span>
+                <span class="skill-chip">GST Audit</span>
+                <span class="skill-chip">Income Tax</span>
+                <span class="skill-chip">ROC Compliance</span>
+                <span class="skill-chip">TDS</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================
+         WORK EXPERIENCE
+         ========================= -->
+    <section class="resume-detail-section" style="padding-top:0;">
+      <div class="resume-wrap">
+
+        <span class="kicker mb-4">Work Experience</span>
+
+        <div class="exp-grid mt-4">
+
+          <article class="exp-card">
+            <div class="exp-meta">
+              <div class="exp-date">2024 – 2026</div>
+              <div>
+                <h2 class="exp-title">Financial Reporting and Audit Associate (CA Articleship)</h2>
+                <span class="exp-company">Atul Goyal &amp; Co.</span>
+              </div>
+            </div>
+            <ul class="resume-bullets">
+              <li>Executed statutory, income tax, and GST audits for 80+ clients, reviewing financial statements, ledger balances, compliance records, and ROC filings.</li>
+              <li>Performed balance sheet scrutiny, profit and loss review, cash flow understanding, variance checks, and working capital, ratio, and related analytical review work.</li>
+              <li>Used SQL, Advanced Excel, Pivot Tables, lookup functions, conditional analysis, and Power Query to organize and test financial data efficiently.</li>
+              <li>Engineered integrated financial forecasts and CMA reports to secure funding and support executive management decisions.</li>
+            </ul>
+          </article>
+
+          <article class="exp-card">
+            <div class="exp-meta">
+              <div class="exp-date">Apr 2024 – Sep 2024</div>
+              <div>
+                <h2 class="exp-title">Finance and Audit Executive</h2>
+                <span class="exp-company">Taxplore Business Solutions Private Limited</span>
+              </div>
+            </div>
+            <ul class="resume-bullets">
+              <li>Managed accounting setup, bookkeeping workflows, and taxation support for startup and SME clients across multiple nations.</li>
+              <li>Implemented accounting and finance systems with Zoho for 150+ clients and monitored 1,200+ monthly transactions involving receivables, payables, expenses, and cash flow.</li>
+              <li>Built Power BI dashboards and Excel-based MIS reports for expense tracking, liquidity review, trend analysis, and management reporting.</li>
+              <li>Applied Power Query and advanced Excel functions to improve data validation, reconciliation accuracy, and financial reporting workflows.</li>
+            </ul>
+          </article>
+
+          <article class="exp-card">
+            <div class="exp-meta">
+              <div class="exp-date">Aug 2023 – Mar 2024</div>
+              <div>
+                <h2 class="exp-title">Intern – Finance and Accounts</h2>
+                <span class="exp-company">M/S Shubham Motors</span>
+              </div>
+            </div>
+            <ul class="resume-bullets">
+              <li>Managed books of accounts, reconciliations, payroll support, taxation (IT, GST, TDS), and periodic financial reporting.</li>
+            </ul>
+          </article>
+
+          <article class="exp-card">
+            <div class="exp-meta">
+              <div class="exp-date">Jan 2023 – Jul 2023</div>
+              <div>
+                <h2 class="exp-title">Intern – Taxation and Consultancy</h2>
+                <span class="exp-company">Rajneesh Agrawal Advocate</span>
+              </div>
+            </div>
+            <ul class="resume-bullets">
+              <li>Assisted with GST returns, income tax filing support, document preparation, and routine client records.</li>
+              <li>Supported client communications and reporting tasks.</li>
+            </ul>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================
+         CORE STRENGTHS + EDUCATION
+         ========================= -->
+    <section class="resume-detail-section" style="padding-top:0;">
+      <div class="resume-wrap">
+
+        <div class="resume-detail-grid">
+
+          <div class="card-swiss">
+            <span class="label-sm">Core strengths</span>
+            <ul class="resume-bullets mt-3">
+              <li>Budgeting, forecasting, variance analysis, and management reporting.</li>
+              <li>Dashboard reporting, KPI tracking, and trend analysis.</li>
+              <li>SQL, Power BI, Power Query, Advanced Excel, and Tableau.</li>
+              <li>Zoho Books, QuickBooks, Xero, and Tally ERP 9.</li>
+              <li>Statutory audit, GST, income tax, and ROC compliance.</li>
+            </ul>
+          </div>
+
+          <div class="card-swiss">
+            <span class="label-sm">Education</span>
+            <div class="edu-grid mt-3" style="grid-template-columns:1fr;">
+
+              <div class="edu-card">
+                <span class="chip chip-primary mb-3" style="display:inline-flex;">2021 – 2024</span>
+                <h4>Bachelor of Commerce (B.Com.)</h4>
+                <p style="color:var(--primary); font-weight:600; font-size:var(--text-sm); margin-bottom:6px;">Jiwaji University</p>
+                <p style="font-size:var(--text-sm);">Undergraduate studies covering accounting, finance, economics, and business fundamentals.</p>
+              </div>
+
+              <div class="edu-card mt-3">
+                <span class="chip chip-primary mb-3" style="display:inline-flex;">2024</span>
+                <h4>Chartered Accountancy — CA Finalist</h4>
+                <p style="color:var(--primary); font-weight:600; font-size:var(--text-sm); margin-bottom:6px;">Institute of Chartered Accountants of India (ICAI)</p>
+                <p style="font-size:var(--text-sm);">CA Intermediate cleared. Currently pursuing CA Final, the highest professional accounting designation in India.</p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================
+         LANGUAGE
+         ========================= -->
+    <section class="resume-detail-section" style="padding-top:0; padding-bottom: clamp(40px, 6vw, 80px);">
+      <div class="resume-wrap">
+
+        <div class="card-swiss d-flex align-items-center justify-content-between flex-wrap gap-4">
+          <div>
+            <span class="label-sm">Language</span>
+            <h3 class="heading-md mt-2">English</h3>
+            <p style="font-size:var(--text-sm); margin-bottom:0; max-width:none;">
+              IELTS 7.5 bands — professional proficiency for client reporting, international communication, and documentation.
+            </p>
+          </div>
+          <span class="chip chip-success" style="font-size:0.85rem; padding:9px 20px; white-space:nowrap;">
+            <i class="bi bi-check-circle-fill"></i>&nbsp; IELTS 7.5 bands
+          </span>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================
+       FOOTER
+       ========================= -->
+  <footer class="site-footer">
+    <div class="resume-wrap d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <span>© 2026 Pranshu Agrawal — Financial Analyst Portfolio</span>
+      <div class="d-flex gap-2 flex-wrap">
+        <a class="btn-outline-swiss btn-sm-swiss" href="index.html">
+          <i class="bi bi-house"></i> Home
+        </a>
+        <a class="btn-outline-swiss btn-sm-swiss" href="index.html#contact">
+          <i class="bi bi-envelope"></i> Contact
+        </a>
+        <a class="btn-swiss btn-sm-swiss" href="assets/resume.pdf" target="_blank" rel="noopener noreferrer">
+          <i class="bi bi-download"></i> Download PDF
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================
+       SCRIPTS
+       ========================= -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    (function () {
+      const root   = document.documentElement;
+      const toggle = document.querySelector('[data-theme-toggle]');
+      if (!toggle) return;
+
+      let theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      root.setAttribute('data-theme', theme);
+
+      function updateIcon() {
+        toggle.innerHTML = theme === 'dark'
+          ? '<i class="bi bi-sun-fill"></i>'
+          : '<i class="bi bi-moon-stars-fill"></i>';
+      }
+
+      updateIcon();
+
+      toggle.addEventListener('click', function () {
+        theme = theme === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', theme);
+        updateIcon();
+      });
+    })();
+  </script>
+
+</body>
+</html>

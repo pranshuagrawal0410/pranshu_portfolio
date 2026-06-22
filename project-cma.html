@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CMA Projection Model — Pranshu Agrawal</title>
+  <meta
+    name="description"
+    content="A comprehensive Excel-based CMA projection model for credit planning, financial reporting, and future-state forecasting. Supports scenario planning and lender-facing financial projections."
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap"
+    rel="stylesheet"
+  />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ============================================
+       PROJECT PAGE STYLES
+       ============================================ */
+
+    .proj-hero {
+      padding-block: clamp(48px, 7vw, 100px);
+      border-bottom: 1px solid var(--divider);
+      background: var(--surface);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .proj-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .proj-hero-inner {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .proj-hero-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: var(--text-xs);
+      color: var(--text-faint);
+      margin-bottom: 20px;
+    }
+    .proj-hero-breadcrumb a { color: var(--text-faint); text-decoration: none; }
+    .proj-hero-breadcrumb a:hover { color: var(--primary); }
+    .proj-hero-breadcrumb i { font-size: 0.65rem; }
+
+    .proj-hero-title {
+      font-size: clamp(1.8rem, 1rem + 3vw, 3.2rem);
+      line-height: 1.1;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .proj-hero-desc {
+      font-size: var(--text-base);
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+
+    .proj-hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    /* In-progress banner */
+    .in-progress-banner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      background: color-mix(in srgb, var(--warning, #b07a00) 8%, var(--surface));
+      border: 1px solid color-mix(in srgb, var(--warning, #b07a00) 22%, var(--border));
+      border-radius: var(--r-lg);
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+    .in-progress-banner i { color: var(--gold, #d19900); flex-shrink: 0; font-size: 1.1rem; }
+
+    .proj-hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      background: var(--surface-2);
+    }
+
+    .proj-stat {
+      flex: 1;
+      min-width: 110px;
+      padding: 16px 18px;
+      border-right: 1px solid var(--border);
+      text-align: center;
+    }
+    .proj-stat:last-child { border-right: none; }
+    .proj-stat-num { font-size: var(--text-xl); font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 4px; }
+    .proj-stat-label { font-size: var(--text-xs); color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.1em; }
+
+    .proj-hero-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 24px;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .proj-info-row { display: flex; flex-direction: column; gap: 3px; }
+    .proj-info-label { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-faint); }
+    .proj-info-value { font-size: var(--text-sm); font-weight: 600; color: var(--text); }
+
+    /* Sections */
+    .proj-section {
+      padding-block: clamp(36px, 5vw, 64px);
+      border-bottom: 1px solid var(--divider);
+    }
+    .proj-section:last-of-type { border-bottom: none; }
+
+    .proj-section-label {
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .proj-section-title {
+      font-size: clamp(1.25rem, 0.8rem + 1.5vw, 2rem);
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .proj-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* Problem card */
+    .problem-card {
+      background: color-mix(in srgb, var(--primary) 5%, var(--surface));
+      border: 1px solid color-mix(in srgb, var(--primary) 18%, var(--border));
+      border-radius: var(--r-xl);
+      padding: 28px;
+    }
+
+    /* Data assumption cards */
+    .assumption-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .assumption-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 20px 18px;
+      transition: border-color var(--ease), transform var(--ease);
+    }
+    .assumption-card:hover {
+      border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
+      transform: translateY(-3px);
+    }
+    .assumption-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--r-md);
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      margin-bottom: 12px;
+    }
+    .assumption-title { font-size: var(--text-sm); font-weight: 700; color: var(--text); margin-bottom: 5px; }
+    .assumption-desc { font-size: var(--text-xs); color: var(--text-muted); line-height: 1.55; margin: 0; }
+
+    /* Three-statement cards */
+    .three-stmt-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .stmt-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 24px;
+      transition: border-color var(--ease), box-shadow var(--ease), transform var(--ease);
+    }
+    .stmt-card:hover {
+      border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-3px);
+    }
+
+    .stmt-num {
+      font-size: var(--text-xl);
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stmt-title { font-size: var(--text-base); font-weight: 700; color: var(--text); margin-bottom: 10px; }
+    .stmt-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .stmt-list li {
+      position: relative;
+      padding-left: 14px;
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .stmt-list li::before { content: "—"; position: absolute; left: 0; color: var(--primary); font-weight: 700; }
+
+    /* Methodology steps */
+    .method-steps { display: grid; gap: 12px; }
+
+    .method-step {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 16px;
+      align-items: start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 18px 20px;
+      transition: border-color var(--ease), transform var(--ease);
+    }
+    .method-step:hover {
+      border-color: color-mix(in srgb, var(--primary) 25%, var(--border));
+      transform: translateX(4px);
+    }
+    .method-step-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: var(--text-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .method-step-title { font-size: var(--text-sm); font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .method-step-desc { font-size: var(--text-sm); color: var(--text-muted); line-height: 1.6; margin: 0; }
+
+    /* Use case grid */
+    .usecase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .usecase-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 22px;
+      transition: border-color var(--ease), box-shadow var(--ease), transform var(--ease);
+    }
+    .usecase-card:hover {
+      border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-3px);
+    }
+    .usecase-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--r-md);
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 14px;
+    }
+    .usecase-title { font-size: var(--text-sm); font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .usecase-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
+    .usecase-list li {
+      position: relative;
+      padding-left: 14px;
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+    .usecase-list li::before { content: "–"; position: absolute; left: 0; color: var(--primary); font-weight: 700; }
+
+    /* Features checklist */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 10px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      line-height: 1.5;
+      transition: border-color var(--ease);
+    }
+    .feature-item:hover { border-color: color-mix(in srgb, var(--primary) 22%, var(--border)); }
+    .feature-item i { color: var(--primary); flex-shrink: 0; margin-top: 2px; }
+
+    /* Expected findings */
+    .findings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .finding-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 22px;
+      transition: border-color var(--ease), box-shadow var(--ease), transform var(--ease);
+    }
+    .finding-card:hover {
+      border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-3px);
+    }
+    .finding-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--r-md);
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 14px;
+    }
+    .finding-title { font-size: var(--text-sm); font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .finding-desc { font-size: var(--text-sm); color: var(--text-muted); line-height: 1.6; margin: 0; }
+
+    /* Recommendations */
+    .rec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .rec-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--primary);
+      border-radius: var(--r-lg);
+      padding: 22px;
+      transition: transform var(--ease), box-shadow var(--ease);
+    }
+    .rec-card:hover { transform: translateX(4px); box-shadow: var(--shadow-sm); }
+    .rec-num { font-size: var(--text-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--primary); margin-bottom: 8px; }
+    .rec-title { font-size: var(--text-sm); font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .rec-desc { font-size: var(--text-sm); color: var(--text-muted); line-height: 1.6; margin: 0; }
+
+    /* Tools */
+    .tools-row { display: flex; flex-wrap: wrap; gap: 12px; }
+    .tool-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--r-pill);
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: all var(--ease);
+    }
+    .tool-badge:hover {
+      background: var(--primary-soft);
+      border-color: color-mix(in srgb, var(--primary) 30%, transparent);
+      color: var(--primary);
+    }
+    .tool-badge i { color: var(--primary); }
+
+    /* Files */
+    .files-list { display: grid; gap: 10px; }
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+    }
+    .file-item i { color: var(--primary); flex-shrink: 0; font-size: 1.1rem; }
+    .file-item .file-name { font-weight: 600; color: var(--text); }
+
+    /* Screenshots */
+    .screenshot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .screenshot-placeholder {
+      aspect-ratio: 16/9;
+      border-radius: var(--r-lg);
+      background: var(--surface-2);
+      border: 2px dashed var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--text-faint);
+      font-size: var(--text-sm);
+      padding: 20px;
+      text-align: center;
+    }
+    .screenshot-placeholder i { font-size: 2rem; color: var(--text-faint); }
+
+    .screenshot-img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      border-radius: var(--r-lg);
+      border: 1px solid var(--border);
+      display: block;
+      cursor: zoom-in;
+      transition: transform var(--ease), box-shadow var(--ease);
+    }
+    .screenshot-img:hover { transform: scale(1.02); box-shadow: var(--shadow-lg); }
+    .screenshot-caption { font-size: var(--text-xs); color: var(--text-faint); margin-top: 8px; text-align: center; }
+
+    /* Lightbox */
+    .lightbox { display: none; position: fixed; inset: 0; background: oklch(0.08 0 0 / 0.88); z-index: 9999; align-items: center; justify-content: center; padding: 20px; }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 90vw; max-height: 85vh; border-radius: var(--r-lg); object-fit: contain; }
+    .lightbox-close { position: fixed; top: 20px; right: 24px; background: none; border: none; color: #fff; font-size: 2rem; cursor: pointer; line-height: 1; }
+
+    /* Next project */
+    .proj-next { padding-block: 32px; background: var(--surface); border-top: 1px solid var(--divider); }
+    .proj-next-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+
+    .site-footer { padding-block: 26px; border-top: 1px solid var(--divider); font-size: var(--text-sm); color: var(--text-faint); }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .proj-hero-inner { grid-template-columns: 1fr; }
+      .proj-hero-card { min-width: unset; }
+      .proj-two-col { grid-template-columns: 1fr; }
+      .three-stmt-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .proj-stat { min-width: 90px; padding: 12px 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================
+       HEADER
+       ========================= -->
+  <header class="site-header">
+    <nav class="navbar" aria-label="Project page navigation">
+      <div class="wrap d-flex justify-content-between align-items-center gap-3">
+
+        <a class="navbar-brand" href="index.html">
+          <span class="brand-logo" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+          </span>
+          Pranshu Agrawal
+        </a>
+
+        <div class="d-flex align-items-center gap-2">
+          <a class="btn-outline-swiss btn-sm-swiss" href="index.html#projects">
+            <i class="bi bi-arrow-left"></i> All projects
+          </a>
+          <a class="btn-outline-swiss btn-sm-swiss" href="resume.html">
+            <i class="bi bi-file-earmark-person"></i> Resume
+          </a>
+          <button class="theme-btn" type="button" data-theme-toggle aria-label="Toggle theme">
+            <i class="bi bi-moon-stars-fill"></i>
+          </button>
+        </div>
+
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- =========================
+         HERO
+         ========================= -->
+    <section class="proj-hero">
+      <div class="wrap">
+        <div class="proj-hero-inner">
+
+          <div>
+            <nav class="proj-hero-breadcrumb" aria-label="Breadcrumb">
+              <a href="index.html">Home</a>
+              <i class="bi bi-chevron-right"></i>
+              <a href="index.html#projects">Projects</a>
+              <i class="bi bi-chevron-right"></i>
+              <span>CMA Projection Model</span>
+            </nav>
+
+            <!-- In-progress banner -->
+            <div class="in-progress-banner" data-aos="fade-up">
+              <i class="bi bi-clock-history"></i>
+              <span>
+                <strong>In Progress</strong> — This project is currently under development.
+                Key features, findings, and screenshots will be added on completion.
+              </span>
+            </div>
+
+            <h1 class="proj-hero-title" data-aos="fade-up">
+              CMA Projection Model
+            </h1>
+
+            <p class="proj-hero-desc" data-aos="fade-up" data-aos-delay="60">
+              A comprehensive Excel-based Cost and Management Accountant (CMA) projection model for
+              credit planning, financial reporting, and future-state forecasting. Supports scenario
+              planning and lender-facing financial projections.
+            </p>
+
+            <div class="proj-hero-tags" data-aos="fade-up" data-aos-delay="100">
+              <span class="chip chip-primary">Advanced Excel</span>
+              <span class="chip chip-primary">Financial Modeling</span>
+              <span class="chip chip-primary">Three-Statement Model</span>
+              <span class="chip">CMA Reporting</span>
+              <span class="chip">Scenario Analysis</span>
+              <span class="chip">Forecasting</span>
+              <span class="chip">Lender Reporting</span>
+              <span class="chip" style="background:color-mix(in srgb,var(--gold,#d19900) 12%,var(--surface-2)); border-color:color-mix(in srgb,var(--gold,#d19900) 28%,var(--border)); color:var(--gold,#d19900);">
+                <i class="bi bi-clock"></i>&nbsp; In Progress
+              </span>
+            </div>
+
+            <!-- Stats bar -->
+            <div class="proj-hero-stats" data-aos="fade-up" data-aos-delay="140">
+              <div class="proj-stat">
+                <div class="proj-stat-num">3</div>
+                <div class="proj-stat-label">Statements</div>
+              </div>
+              <div class="proj-stat">
+                <div class="proj-stat-num">3–5yr</div>
+                <div class="proj-stat-label">Projection</div>
+              </div>
+              <div class="proj-stat">
+                <div class="proj-stat-num">3</div>
+                <div class="proj-stat-label">Scenarios</div>
+              </div>
+              <div class="proj-stat">
+                <div class="proj-stat-num">6+</div>
+                <div class="proj-stat-label">Assumption sets</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Side info card -->
+          <div class="proj-hero-card" data-aos="fade-left">
+            <div class="proj-info-row">
+              <span class="proj-info-label">Category</span>
+              <span class="proj-info-value">Financial Modeling / CMA</span>
+            </div>
+            <div class="proj-info-row">
+              <span class="proj-info-label">Primary tool</span>
+              <span class="proj-info-value">Microsoft Excel</span>
+            </div>
+            <div class="proj-info-row">
+              <span class="proj-info-label">Data source</span>
+              <span class="proj-info-value">Historical financials &amp; assumptions</span>
+            </div>
+            <div class="proj-info-row">
+              <span class="proj-info-label">Projection horizon</span>
+              <span class="proj-info-value">3–5 years</span>
+            </div>
+            <div class="proj-info-row">
+              <span class="proj-info-label">Status</span>
+              <span class="proj-info-value" style="color:var(--gold,#d19900);">
+                <i class="bi bi-clock-history"></i> In Progress
+              </span>
+            </div>
+            <a class="btn-swiss" href="index.html#contact">
+              <i class="bi bi-envelope"></i> Discuss this project
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         OVERVIEW
+         ========================= -->
+    <section class="proj-section">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Overview</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Project overview</h2>
+
+        <div class="proj-two-col">
+          <div data-aos="fade-up">
+            <p style="color:var(--text-muted); line-height:1.8; font-size:var(--text-base); max-width:none;">
+              This project involves designing a future-state financial model for reporting and financing
+              needs. The CMA (Cost and Management Accountant) projection model provides comprehensive
+              financial forecasting capabilities to support credit decisions and financial planning.
+            </p>
+            <p style="color:var(--text-muted); line-height:1.8; font-size:var(--text-base); max-width:none; margin-top:16px;">
+              The model includes projected income statements, balance sheets, and cash flow statements
+              based on historical financials and strategic assumptions — structured to be presented
+              directly to lenders, auditors, and management.
+            </p>
+          </div>
+
+          <!-- Business problem card -->
+          <div class="problem-card" data-aos="fade-up" data-aos-delay="60">
+            <div class="proj-section-label" style="margin-bottom:14px;">
+              <i class="bi bi-exclamation-circle-fill"></i>&nbsp; Business problem
+            </div>
+            <p style="font-size:var(--text-sm); color:var(--text-muted); margin-bottom:14px; max-width:none; line-height:1.7;">
+              Organizations requiring credit funding or financial planning need:
+            </p>
+            <ul style="list-style:none; padding:0; margin:0; display:grid; gap:9px;">
+              <li style="display:flex; align-items:flex-start; gap:10px; font-size:var(--text-sm); color:var(--text-muted);">
+                <i class="bi bi-arrow-right-circle-fill" style="color:var(--primary); flex-shrink:0; margin-top:2px;"></i>
+                Accurate future-state financial projections for lender review
+              </li>
+              <li style="display:flex; align-items:flex-start; gap:10px; font-size:var(--text-sm); color:var(--text-muted);">
+                <i class="bi bi-arrow-right-circle-fill" style="color:var(--primary); flex-shrink:0; margin-top:2px;"></i>
+                Scenario planning capabilities to evaluate different business outcomes
+              </li>
+              <li style="display:flex; align-items:flex-start; gap:10px; font-size:var(--text-sm); color:var(--text-muted);">
+                <i class="bi bi-arrow-right-circle-fill" style="color:var(--primary); flex-shrink:0; margin-top:2px;"></i>
+                Comprehensive CMA reports for regulatory and financing purposes
+              </li>
+              <li style="display:flex; align-items:flex-start; gap:10px; font-size:var(--text-sm); color:var(--text-muted);">
+                <i class="bi bi-arrow-right-circle-fill" style="color:var(--primary); flex-shrink:0; margin-top:2px;"></i>
+                Structured forecasting models based on historical data and assumptions
+              </li>
+              <li style="display:flex; align-items:flex-start; gap:10px; font-size:var(--text-sm); color:var(--text-muted);">
+                <i class="bi bi-arrow-right-circle-fill" style="color:var(--primary); flex-shrink:0; margin-top:2px;"></i>
+                Ability to test conservative vs. aggressive business scenarios
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         DATA / ASSUMPTIONS
+         ========================= -->
+    <section class="proj-section" style="background:var(--surface);">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Inputs</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Data &amp; assumptions used</h2>
+
+        <p style="color:var(--text-muted); max-width:580px; margin-bottom:28px; font-size:var(--text-sm); line-height:1.7;" data-aos="fade-up">
+          <strong>Source:</strong> Historical financials and structured business assumptions across
+          six key input categories driving the three-statement model.
+        </p>
+
+        <div class="assumption-grid" data-aos="fade-up">
+          <div class="assumption-card">
+            <div class="assumption-icon"><i class="bi bi-journal-text"></i></div>
+            <div class="assumption-title">Historical Financials</div>
+            <p class="assumption-desc">Past income statements, balance sheets, and cash flow statements as the model baseline.</p>
+          </div>
+          <div class="assumption-card">
+            <div class="assumption-icon"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="assumption-title">Revenue Assumptions</div>
+            <p class="assumption-desc">Growth rates, pricing assumptions, and volume projections per scenario.</p>
+          </div>
+          <div class="assumption-card">
+            <div class="assumption-icon"><i class="bi bi-cash-stack"></i></div>
+            <div class="assumption-title">Cost Assumptions</div>
+            <p class="assumption-desc">COGS rates, operating expense projections, and margin assumptions.</p>
+          </div>
+          <div class="assumption-card">
+            <div class="assumption-icon"><i class="bi bi-building"></i></div>
+            <div class="assumption-title">Capital Assumptions</div>
+            <p class="assumption-desc">Working capital requirements and fixed asset investment plans.</p>
+          </div>
+          <div class="assumption-card">
+            <div class="assumption-icon"><i class="bi bi-bank2"></i></div>
+            <div class="assumption-title">Funding Assumptions</div>
+            <p class="assumption-desc">Debt terms, interest rates, and equity structure plans.</p>
+          </div>
+          <div class="assumption-card">
+            <div class="assumption-icon"><i class="bi bi-receipt-cutoff"></i></div>
+            <div class="assumption-title">Tax Assumptions</div>
+            <p class="assumption-desc">Tax rates and depreciation schedules for P&amp;L and balance sheet projections.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         THREE-STATEMENT MODEL
+         ========================= -->
+    <section class="proj-section">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Model components</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Three-statement financial model</h2>
+
+        <p style="color:var(--text-muted); max-width:580px; margin-bottom:28px; font-size:var(--text-sm); line-height:1.7;" data-aos="fade-up">
+          The model integrates all three core financial statements — linked and auto-updating based on a
+          shared assumptions engine.
+        </p>
+
+        <div class="three-stmt-grid" data-aos="fade-up">
+          <div class="stmt-card">
+            <div class="stmt-num">01</div>
+            <div class="stmt-title">Projected Income Statement</div>
+            <ul class="stmt-list">
+              <li>Revenue projections</li>
+              <li>Cost of Goods Sold (COGS)</li>
+              <li>Operating expenses</li>
+              <li>EBITDA calculation</li>
+              <li>Net income projections</li>
+            </ul>
+          </div>
+
+          <div class="stmt-card">
+            <div class="stmt-num">02</div>
+            <div class="stmt-title">Projected Balance Sheet</div>
+            <ul class="stmt-list">
+              <li>Total assets projection</li>
+              <li>Liabilities schedule</li>
+              <li>Equity build-up</li>
+              <li>Working capital position</li>
+              <li>Debt &amp; financing structure</li>
+            </ul>
+          </div>
+
+          <div class="stmt-card">
+            <div class="stmt-num">03</div>
+            <div class="stmt-title">Projected Cash Flow</div>
+            <ul class="stmt-list">
+              <li>Operating cash flows</li>
+              <li>Investing cash flows</li>
+              <li>Financing cash flows</li>
+              <li>Net cash movement</li>
+              <li>Closing cash position</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         METHODOLOGY
+         ========================= -->
+    <section class="proj-section" style="background:var(--surface);">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Methodology</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Approach &amp; methodology</h2>
+
+        <div class="method-steps" data-aos="fade-up">
+          <div class="method-step">
+            <div class="method-step-num">1</div>
+            <div>
+              <div class="method-step-title">Historical baseline analysis</div>
+              <p class="method-step-desc">Analyzed historical financial data to establish baseline trends for revenue growth, margins, and working capital ratios.</p>
+            </div>
+          </div>
+
+          <div class="method-step">
+            <div class="method-step-num">2</div>
+            <div>
+              <div class="method-step-title">Revenue projection modeling</div>
+              <p class="method-step-desc">Developed revenue projection models based on growth assumptions for conservative, base, and aggressive scenarios.</p>
+            </div>
+          </div>
+
+          <div class="method-step">
+            <div class="method-step-num">3</div>
+            <div>
+              <div class="method-step-title">Cost and expense forecasting</div>
+              <p class="method-step-desc">Built cost projection models with COGS rates, operating expense forecasts, and headcount-linked payroll estimates.</p>
+            </div>
+          </div>
+
+          <div class="method-step">
+            <div class="method-step-num">4</div>
+            <div>
+              <div class="method-step-title">Balance sheet &amp; working capital modeling</div>
+              <p class="method-step-desc">Created working capital models for balance sheet projections covering receivables, payables, inventory, and fixed assets.</p>
+            </div>
+          </div>
+
+          <div class="method-step">
+            <div class="method-step-num">5</div>
+            <div>
+              <div class="method-step-title">Three-statement integration</div>
+              <p class="method-step-desc">Integrated cash flow statements linking all three projection sheets — ensuring balance sheet checks, plug reconciliation, and consistency.</p>
+            </div>
+          </div>
+
+          <div class="method-step">
+            <div class="method-step-num">6</div>
+            <div>
+              <div class="method-step-title">Scenario testing &amp; sensitivity analysis</div>
+              <p class="method-step-desc">Implemented scenario comparison tables (Conservative vs. Base vs. Aggressive) and sensitivity analysis for key driver variables.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         PLANNING & USE CASES
+         ========================= -->
+    <section class="proj-section">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Use cases</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Planning &amp; use cases</h2>
+
+        <div class="usecase-grid">
+          <div class="usecase-card" data-aos="fade-up">
+            <div class="usecase-icon"><i class="bi bi-bank2"></i></div>
+            <div class="usecase-title">Credit Planning</div>
+            <ul class="usecase-list">
+              <li>Support lender review and credit applications</li>
+              <li>Demonstrate future repayment capacity</li>
+              <li>Provide credible financial projections</li>
+            </ul>
+          </div>
+
+          <div class="usecase-card" data-aos="fade-up" data-aos-delay="50">
+            <div class="usecase-icon"><i class="bi bi-sliders"></i></div>
+            <div class="usecase-title">Scenario Planning</div>
+            <ul class="usecase-list">
+              <li>Test conservative assumptions</li>
+              <li>Evaluate aggressive growth scenarios</li>
+              <li>Analyze impact of assumption changes</li>
+            </ul>
+          </div>
+
+          <div class="usecase-card" data-aos="fade-up" data-aos-delay="90">
+            <div class="usecase-icon"><i class="bi bi-journal-check"></i></div>
+            <div class="usecase-title">Regulatory Reporting</div>
+            <ul class="usecase-list">
+              <li>Prepare CMA reports for compliance</li>
+              <li>Support statutory filing requirements</li>
+              <li>Provide auditor-facing projections</li>
+            </ul>
+          </div>
+
+          <div class="usecase-card" data-aos="fade-up" data-aos-delay="120">
+            <div class="usecase-icon"><i class="bi bi-compass"></i></div>
+            <div class="usecase-title">Strategic Planning</div>
+            <ul class="usecase-list">
+              <li>Evaluate business expansion plans</li>
+              <li>Assess funding requirements</li>
+              <li>Support investment decisions</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         KEY FEATURES
+         ========================= -->
+    <section class="proj-section" style="background:var(--surface);">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Features</div>
+        <h2 class="proj-section-title" data-aos="fade-up">
+          Key features
+          <span style="font-size:var(--text-sm); font-weight:500; color:var(--gold,#d19900); margin-left:10px;">
+            <i class="bi bi-clock-history"></i> Planned
+          </span>
+        </h2>
+
+        <div class="features-grid" data-aos="fade-up">
+          <div class="feature-item">
+            <i class="bi bi-check2-circle"></i>
+            Three-statement financial model (Income Statement, Balance Sheet, Cash Flow)
+          </div>
+          <div class="feature-item">
+            <i class="bi bi-check2-circle"></i>
+            Multi-year projection capability — 3 to 5 year horizon
+          </div>
+          <div class="feature-item">
+            <i class="bi bi-check2-circle"></i>
+            Scenario comparison tables — Conservative vs. Base vs. Aggressive
+          </div>
+          <div class="feature-item">
+            <i class="bi bi-check2-circle"></i>
+            Sensitivity analysis for key driver variables
+          </div>
+          <div class="feature-item">
+            <i class="bi bi-check2-circle"></i>
+            Automated financial ratio calculations
+          </div>
+          <div class="feature-item">
+            <i class="bi bi-check2-circle"></i>
+            Debt service coverage and liquidity metrics
+          </div>
+          <div class="feature-item">
+            <i class="bi bi-check2-circle"></i>
+            Professional formatting for lender presentation
+          </div>
+          <div class="feature-item">
+            <i class="bi bi-check2-circle"></i>
+            Full documentation of all model assumptions
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         EXPECTED KEY FINDINGS
+         ========================= -->
+    <section class="proj-section">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Expected findings</div>
+        <h2 class="proj-section-title" data-aos="fade-up">
+          Expected key findings
+          <span style="font-size:var(--text-sm); font-weight:500; color:var(--gold,#d19900); margin-left:10px;">
+            <i class="bi bi-clock-history"></i> Planned
+          </span>
+        </h2>
+
+        <p style="color:var(--text-muted); max-width:580px; margin-bottom:28px; font-size:var(--text-sm); line-height:1.7;" data-aos="fade-up">
+          The completed model will support scenario planning and lender review with the following projected insights:
+        </p>
+
+        <div class="findings-grid">
+          <div class="finding-card" data-aos="fade-up">
+            <div class="finding-icon"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="finding-title">Revenue Growth Trajectories</div>
+            <p class="finding-desc">Projected revenue growth paths under conservative, base, and aggressive scenarios across the 3–5 year projection period.</p>
+          </div>
+
+          <div class="finding-card" data-aos="fade-up" data-aos-delay="50">
+            <div class="finding-icon"><i class="bi bi-percent"></i></div>
+            <div class="finding-title">Profitability Margins &amp; EBITDA</div>
+            <p class="finding-desc">Future profitability margins and EBITDA trends across scenarios showing sensitivity to cost and revenue assumptions.</p>
+          </div>
+
+          <div class="finding-card" data-aos="fade-up" data-aos-delay="90">
+            <div class="finding-icon"><i class="bi bi-arrow-repeat"></i></div>
+            <div class="finding-title">Working Capital Requirements</div>
+            <p class="finding-desc">Projected working capital needs and cash conversion cycle implications tied to growth and business model assumptions.</p>
+          </div>
+
+          <div class="finding-card" data-aos="fade-up" data-aos-delay="120">
+            <div class="finding-icon"><i class="bi bi-bank"></i></div>
+            <div class="finding-title">Debt Service Capacity</div>
+            <p class="finding-desc">Coverage ratios and repayment capacity analysis to support lender due diligence and credit approval decisions.</p>
+          </div>
+
+          <div class="finding-card" data-aos="fade-up" data-aos-delay="150">
+            <div class="finding-icon"><i class="bi bi-stack"></i></div>
+            <div class="finding-title">Funding Requirements</div>
+            <p class="finding-desc">Capital structure analysis and funding gap assessment identifying debt, equity, and internal generation needs.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         RECOMMENDATIONS
+         ========================= -->
+    <section class="proj-section" style="background:var(--surface);">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Recommendations</div>
+        <h2 class="proj-section-title" data-aos="fade-up">
+          Modeling recommendations
+          <span style="font-size:var(--text-sm); font-weight:500; color:var(--gold,#d19900); margin-left:10px;">
+            <i class="bi bi-clock-history"></i> Planned
+          </span>
+        </h2>
+
+        <div class="rec-grid">
+          <div class="rec-card" data-aos="fade-up">
+            <div class="rec-num">01</div>
+            <div class="rec-title">Use Conservative Assumptions for Lenders</div>
+            <p class="rec-desc">Use conservative assumptions for lender-facing projections to ensure credibility and demonstrate realistic repayment capacity.</p>
+          </div>
+
+          <div class="rec-card" data-aos="fade-up" data-aos-delay="50">
+            <div class="rec-num">02</div>
+            <div class="rec-title">Thorough Scenario Testing</div>
+            <p class="rec-desc">Perform thorough scenario testing before finalizing projections to understand the full range of possible financial outcomes.</p>
+          </div>
+
+          <div class="rec-card" data-aos="fade-up" data-aos-delay="90">
+            <div class="rec-num">03</div>
+            <div class="rec-title">Document All Assumptions</div>
+            <p class="rec-desc">Document all assumptions clearly for a complete audit trail — critical for lender review and regulatory compliance.</p>
+          </div>
+
+          <div class="rec-card" data-aos="fade-up" data-aos-delay="120">
+            <div class="rec-num">04</div>
+            <div class="rec-title">Benchmark Against Industry</div>
+            <p class="rec-desc">Validate projections against industry benchmarks to ensure assumptions are commercially reasonable and defensible.</p>
+          </div>
+
+          <div class="rec-card" data-aos="fade-up" data-aos-delay="150">
+            <div class="rec-num">05</div>
+            <div class="rec-title">Regular Model Updates</div>
+            <p class="rec-desc">Update models regularly as actual results become available, rolling forward projections and recalibrating assumptions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         TOOLS USED
+         ========================= -->
+    <section class="proj-section">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Tools</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Tools used</h2>
+
+        <div class="tools-row" data-aos="fade-up">
+          <div class="tool-badge">
+            <i class="bi bi-file-earmark-spreadsheet-fill"></i>
+            Microsoft Excel
+          </div>
+          <div class="tool-badge">
+            <i class="bi bi-code-square"></i>
+            Excel Formulas &amp; Functions
+          </div>
+          <div class="tool-badge">
+            <i class="bi bi-sliders"></i>
+            Scenario Manager
+          </div>
+          <div class="tool-badge">
+            <i class="bi bi-grid-3x3"></i>
+            Data Tables (Sensitivity Analysis)
+          </div>
+          <div class="tool-badge">
+            <i class="bi bi-bar-chart-fill"></i>
+            Excel Charts &amp; Dashboards
+          </div>
+          <div class="tool-badge">
+            <i class="bi bi-calculator"></i>
+            Financial Ratio Calculations
+          </div>
+          <div class="tool-badge">
+            <i class="bi bi-diagram-3"></i>
+            Three-Statement Modeling
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         FILES
+         ========================= -->
+    <section class="proj-section" style="background:var(--surface);">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Files</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Project files</h2>
+
+        <p style="color:var(--text-muted); font-size:var(--text-sm); margin-bottom:20px;" data-aos="fade-up">
+          Files will be available when the project is completed:
+        </p>
+
+        <div class="files-list" data-aos="fade-up">
+          <div class="file-item">
+            <i class="bi bi-file-earmark-spreadsheet"></i>
+            <div>
+              <div class="file-name">CMA Projection Model.xlsx</div>
+              <span style="font-size:var(--text-xs); color:var(--text-faint);">Excel workbook — three-statement projection model with scenarios</span>
+            </div>
+            <span class="chip" style="margin-left:auto; white-space:nowrap; color:var(--gold,#d19900); border-color:color-mix(in srgb,var(--gold,#d19900) 28%,var(--border));">
+              <i class="bi bi-clock"></i>&nbsp; Pending
+            </span>
+          </div>
+          <div class="file-item">
+            <i class="bi bi-file-earmark-pdf"></i>
+            <div>
+              <div class="file-name">Sample Projection Report.pdf</div>
+              <span style="font-size:var(--text-xs); color:var(--text-faint);">Lender-facing formatted CMA projection report</span>
+            </div>
+            <span class="chip" style="margin-left:auto; white-space:nowrap; color:var(--gold,#d19900); border-color:color-mix(in srgb,var(--gold,#d19900) 28%,var(--border));">
+              <i class="bi bi-clock"></i>&nbsp; Pending
+            </span>
+          </div>
+          <div class="file-item">
+            <i class="bi bi-file-earmark-text"></i>
+            <div>
+              <div class="file-name">Assumption Documentation.xlsx</div>
+              <span style="font-size:var(--text-xs); color:var(--text-faint);">Full documentation of all model inputs and assumptions</span>
+            </div>
+            <span class="chip" style="margin-left:auto; white-space:nowrap; color:var(--gold,#d19900); border-color:color-mix(in srgb,var(--gold,#d19900) 28%,var(--border));">
+              <i class="bi bi-clock"></i>&nbsp; Pending
+            </span>
+          </div>
+        </div>
+
+        <div class="mt-4" data-aos="fade-up">
+          <a class="btn-outline-swiss btn-sm-swiss" href="index.html#contact">
+            <i class="bi bi-envelope"></i> Request early access
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         SCREENSHOTS
+         ========================= -->
+    <section class="proj-section">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Screenshots</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Dashboard screenshots</h2>
+
+        <p style="color:var(--text-muted); font-size:var(--text-sm); max-width:600px; margin-bottom:28px;" data-aos="fade-up">
+          Screenshots will be added when the project is completed.
+        </p>
+
+        <div class="screenshot-grid" data-aos="fade-up">
+          <div class="screenshot-placeholder">
+            <i class="bi bi-file-earmark-bar-graph"></i>
+            <span>Projected Income Statement<br><small>Revenue, EBITDA, and net income trends</small></span>
+          </div>
+          <div class="screenshot-placeholder">
+            <i class="bi bi-building"></i>
+            <span>Projected Balance Sheet<br><small>Asset/liability breakdown and equity build</small></span>
+          </div>
+          <div class="screenshot-placeholder">
+            <i class="bi bi-droplet-half"></i>
+            <span>Projected Cash Flow Dashboard<br><small>Operating, investing, and financing flows</small></span>
+          </div>
+          <div class="screenshot-placeholder">
+            <i class="bi bi-sliders"></i>
+            <span>Scenario Comparison Charts<br><small>Conservative vs. Base vs. Aggressive</small></span>
+          </div>
+          <div class="screenshot-placeholder">
+            <i class="bi bi-speedometer2"></i>
+            <span>Financial Ratios &amp; Metrics<br><small>Debt coverage, liquidity, and profitability ratios</small></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================
+       NEXT PROJECT
+       ========================= -->
+  <div class="proj-next">
+    <div class="wrap">
+      <div class="proj-next-inner">
+        <div>
+          <span class="label-sm">Next project</span>
+          <p style="font-size:var(--text-base); font-weight:600; color:var(--text); margin-bottom:0; margin-top:4px;">
+            GST Analytics Dashboard
+          </p>
+        </div>
+        <a class="btn-swiss" href="project-gst.html">
+          View next project <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Screenshot viewer">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close lightbox">&times;</button>
+    <img src="" id="lightboxImg" alt="Screenshot full view">
+  </div>
+
+  <!-- =========================
+       FOOTER
+       ========================= -->
+  <footer class="site-footer">
+    <div class="wrap d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <span>© 2026 Pranshu Agrawal — Financial Analyst Portfolio</span>
+      <div class="d-flex gap-2 flex-wrap">
+        <a class="btn-outline-swiss btn-sm-swiss" href="index.html">
+          <i class="bi bi-house"></i> Home
+        </a>
+        <a class="btn-outline-swiss btn-sm-swiss" href="index.html#projects">
+          <i class="bi bi-grid-3x3-gap"></i> All projects
+        </a>
+        <a class="btn-outline-swiss btn-sm-swiss" href="resume.html">
+          <i class="bi bi-file-earmark-person"></i> Resume
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <script>
+    AOS.init({ duration: 520, once: true, offset: 60 });
+
+    /* Theme toggle */
+    (function () {
+      const root   = document.documentElement;
+      const toggle = document.querySelector('[data-theme-toggle]');
+      if (!toggle) return;
+      let theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      root.setAttribute('data-theme', theme);
+      function updateIcon() {
+        toggle.innerHTML = theme === 'dark'
+          ? '<i class="bi bi-sun-fill"></i>'
+          : '<i class="bi bi-moon-stars-fill"></i>';
+      }
+      updateIcon();
+      toggle.addEventListener('click', function () {
+        theme = theme === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', theme);
+        updateIcon();
+      });
+    })();
+
+    /* Lightbox */
+    (function () {
+      const lightbox = document.getElementById('lightbox');
+      const lbImg    = document.getElementById('lightboxImg');
+      const lbClose  = document.getElementById('lightboxClose');
+      document.querySelectorAll('.screenshot-img').forEach(function (img) {
+        img.addEventListener('click', function () {
+          lbImg.src = img.src;
+          lbImg.alt = img.alt;
+          lightbox.classList.add('open');
+        });
+      });
+      function closeLb() { lightbox.classList.remove('open'); lbImg.src = ''; }
+      lbClose.addEventListener('click', closeLb);
+      lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLb(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeLb(); });
+    })();
+  </script>
+
+</body>
+</html>

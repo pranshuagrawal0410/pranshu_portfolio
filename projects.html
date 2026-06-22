@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Projects — Pranshu Agrawal</title>
+  <meta name="description" content="Finance, audit, BI, and analytics case studies by Pranshu Agrawal — filterable project portfolio." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- NAVBAR (same on every page) -->
+  <header class="site-header">
+    <nav class="navbar navbar-expand-lg" aria-label="Main navigation">
+      <div class="wrap" style="width:100%; max-width:var(--max-w); margin-inline:auto; display:flex; align-items:center; justify-content:space-between; gap:12px; padding-inline:max(20px,(100% - var(--max-w))/2);">
+        <a class="navbar-brand" href="index.html">
+          <span class="brand-logo"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+          Pranshu Agrawal
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav2" aria-expanded="false"><i class="bi bi-list" style="font-size:1.3rem;"></i></button>
+        <div class="collapse navbar-collapse" id="mainNav2">
+          <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-1">
+            <li class="nav-item"><a class="nav-link" href="index.html#hero">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html#about">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html#experience">Experience</a></li>
+            <li class="nav-item"><a class="nav-link active" href="projects.html">Projects</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html#skills">Skills</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact</a></li>
+          </ul>
+          <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+            <a class="btn-outline-swiss btn-sm-swiss" href="assets/resume.pdf" target="_blank"><i class="bi bi-file-earmark-pdf"></i> Resume</a>
+            <button class="theme-btn" type="button" data-theme-toggle><i class="bi bi-moon-stars-fill"></i></button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="wrap">
+        <a class="back-link" href="index.html"><i class="bi bi-arrow-left"></i> Back to home</a>
+        <div class="section-head" data-aos="fade-up">
+          <div><span class="kicker">All projects</span><h1 class="heading-xl">Finance and analytics case studies</h1></div>
+          <p>Five detailed case studies covering FP&A dashboards, CMA models, GST compliance analytics, startup MIS, and accounts receivable analysis.</p>
+        </div>
+
+        <!-- Filter buttons -->
+        <div class="d-flex flex-wrap gap-2 mb-8" data-aos="fade-up">
+          <button class="btn-swiss btn-sm-swiss" data-filter="all">All</button>
+          <button class="btn-outline-swiss btn-sm-swiss" data-filter="powerbi">Power BI</button>
+          <button class="btn-outline-swiss btn-sm-swiss" data-filter="excel">Excel</button>
+          <button class="btn-outline-swiss btn-sm-swiss" data-filter="audit">Audit</button>
+          <button class="btn-outline-swiss btn-sm-swiss" data-filter="tax">Taxation</button>
+        </div>
+
+        <div class="projects-grid">
+          <article class="project-card" data-category="powerbi fpa" data-aos="fade-up">
+            <div class="project-icon"><i class="bi bi-graph-up-arrow"></i></div>
+            <div>
+              <span class="chip chip-primary mb-2">Featured</span>
+              <h3>FP&A and Business Performance Dashboard</h3>
+              <p>Revenue, profitability, product, customer, regional, budget vs. actual, and cash flow analysis in a single Power BI solution. 25,000+ sales records, 24-month coverage.</p>
+            </div>
+            <div class="project-chips"><span class="chip">Power BI</span><span class="chip">DAX</span><span class="chip">Power Query</span></div>
+            <div class="project-foot">
+              <span class="project-status status-complete"><i class="bi bi-check-circle-fill"></i> Completed</span>
+              <a class="project-link" href="project-fpa.html">Open <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </article>
+
+          <article class="project-card" data-category="excel forecast" data-aos="fade-up">
+            <div class="project-icon"><i class="bi bi-bank2"></i></div>
+            <div>
+              <span class="chip mb-2">Funding model</span>
+              <h3>CMA Projection Model</h3>
+              <p>Three-statement Excel model — projected Income Statement, Balance Sheet, and Cash Flow — with scenario testing for conservative vs. aggressive business assumptions. Supports lender credit review.</p>
+            </div>
+            <div class="project-chips"><span class="chip">Excel</span><span class="chip">Forecasting</span><span class="chip">3-statement model</span></div>
+            <div class="project-foot">
+              <span class="project-status status-progress"><i class="bi bi-clock"></i> In progress</span>
+              <a class="project-link" href="project-cma.html">Open <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </article>
+
+          <article class="project-card" data-category="powerbi tax audit" data-aos="fade-up">
+            <div class="project-icon"><i class="bi bi-receipt-cutoff"></i></div>
+            <div>
+              <span class="chip mb-2">Compliance analytics</span>
+              <h3>GST Analytics Dashboard</h3>
+              <p>GST liability tracking, GSTR-1/3B/9 reconciliation, ITC utilization, and filing trend review. Mismatch detection across CGST, SGST, and IGST with exception alerts.</p>
+            </div>
+            <div class="project-chips"><span class="chip">Power BI</span><span class="chip">GST returns</span><span class="chip">Reconciliation</span></div>
+            <div class="project-foot">
+              <span class="project-status status-progress"><i class="bi bi-clock"></i> In progress</span>
+              <a class="project-link" href="project-gst.html">Open <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </article>
+
+          <article class="project-card" data-category="excel mis" data-aos="fade-up">
+            <div class="project-icon"><i class="bi bi-bar-chart-steps"></i></div>
+            <div>
+              <span class="chip mb-2">Management reporting</span>
+              <h3>Startup Finance MIS</h3>
+              <p>B2B SaaS startup finance reporting system: revenue trends, customer concentration, AR aging, budget vs. actuals, working capital tracking, and cash runway analysis.</p>
+            </div>
+            <div class="project-chips"><span class="chip">Excel</span><span class="chip">Pivot tables</span><span class="chip">Risk indicators</span></div>
+            <div class="project-foot">
+              <span class="project-status status-complete"><i class="bi bi-check-circle-fill"></i> Completed</span>
+              <a class="project-link" href="project-mis.html">Open <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </article>
+
+          <article class="project-card" data-category="excel audit" data-aos="fade-up">
+            <div class="project-icon"><i class="bi bi-hourglass-split"></i></div>
+            <div>
+              <span class="chip mb-2">Receivables analysis</span>
+              <h3>Accounts Receivable Aging</h3>
+              <p>Debtor ledger aging model grouping customer balances into 0–30, 31–60, 61–90, and 90+ day overdue buckets. DSO tracking, credit limit review, and collection risk concentration.</p>
+            </div>
+            <div class="project-chips"><span class="chip">Excel</span><span class="chip">Aging buckets</span><span class="chip">DSO</span></div>
+            <div class="project-foot">
+              <span class="project-status status-progress"><i class="bi bi-clock"></i> In progress</span>
+              <a class="project-link" href="project-ar.html">Open <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap d-flex flex-column flex-md-row justify-content-between gap-2">
+      <span>© 2026 Pranshu Agrawal</span>
+      <a class="text-primary" href="index.html#contact">Send enquiry</a>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>AOS.init({ once: true, duration: 500, offset: 60 });</script>
+  <script src="js/main.js"></script>
+</body>
+</html>

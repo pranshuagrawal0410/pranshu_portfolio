@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FP&A & Business Performance Dashboard — Pranshu Agrawal</title>
+  <meta
+    name="description"
+    content="A Power BI dashboard providing centralized business intelligence for financial planning and analysis — revenue, profitability, customers, regions, budgets, and cash flow."
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap"
+    rel="stylesheet"
+  />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ============================================
+       PROJECT PAGE STYLES
+       ============================================ */
+
+    /* --- Hero --- */
+    .proj-hero {
+      padding-block: clamp(48px, 7vw, 100px);
+      border-bottom: 1px solid var(--divider);
+      background: var(--surface);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* subtle grid texture on hero */
+    .proj-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .proj-hero-inner {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .proj-hero-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: var(--text-xs);
+      color: var(--text-faint);
+      margin-bottom: 20px;
+    }
+
+    .proj-hero-breadcrumb a {
+      color: var(--text-faint);
+      text-decoration: none;
+    }
+
+    .proj-hero-breadcrumb a:hover { color: var(--primary); }
+    .proj-hero-breadcrumb i { font-size: 0.65rem; }
+
+    .proj-hero-title {
+      font-size: clamp(1.8rem, 1rem + 3vw, 3.2rem);
+      line-height: 1.1;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .proj-hero-desc {
+      font-size: var(--text-base);
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+
+    .proj-hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    /* stats bar inside hero */
+    .proj-hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      background: var(--surface-2);
+    }
+
+    .proj-stat {
+      flex: 1;
+      min-width: 120px;
+      padding: 16px 20px;
+      border-right: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .proj-stat:last-child { border-right: none; }
+
+    .proj-stat-num {
+      font-size: var(--text-xl);
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .proj-stat-label {
+      font-size: var(--text-xs);
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* side info card in hero */
+    .proj-hero-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 24px;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .proj-info-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .proj-info-label {
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-faint);
+    }
+
+    .proj-info-value {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* --- Section layouts --- */
+    .proj-section {
+      padding-block: clamp(36px, 5vw, 64px);
+      border-bottom: 1px solid var(--divider);
+    }
+
+    .proj-section:last-of-type { border-bottom: none; }
+
+    .proj-section-label {
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .proj-section-title {
+      font-size: clamp(1.25rem, 0.8rem + 1.5vw, 2rem);
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    /* two-col layout */
+    .proj-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* --- Problem card --- */
+    .problem-card {
+      background: color-mix(in srgb, var(--primary) 5%, var(--surface));
+      border: 1px solid color-mix(in srgb, var(--primary) 18%, var(--border));
+      border-radius: var(--r-xl);
+      padding: 28px;
+    }
+
+    /* --- Data stats grid --- */
+    .data-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 14px;
+    }
+
+    .data-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 18px 16px;
+      text-align: center;
+      transition: border-color var(--ease), transform var(--ease);
+    }
+
+    .data-card:hover {
+      border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
+      transform: translateY(-3px);
+    }
+
+    .data-card-num {
+      font-size: var(--text-xl);
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .data-card-label {
+      font-size: var(--text-xs);
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .data-card-sub {
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* --- Methodology steps --- */
+    .method-steps {
+      display: grid;
+      gap: 12px;
+    }
+
+    .method-step {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 16px;
+      align-items: start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 18px 20px;
+      transition: border-color var(--ease), transform var(--ease);
+    }
+
+    .method-step:hover {
+      border-color: color-mix(in srgb, var(--primary) 25%, var(--border));
+      transform: translateX(4px);
+    }
+
+    .method-step-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: var(--text-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .method-step-title {
+      font-size: var(--text-sm);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .method-step-desc {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* --- Analysis tabs --- */
+    .analysis-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .analysis-tab {
+      padding: 8px 18px;
+      border-radius: var(--r-pill);
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--ease);
+    }
+
+    .analysis-tab.active,
+    .analysis-tab:hover {
+      background: var(--primary-soft);
+      border-color: color-mix(in srgb, var(--primary) 30%, transparent);
+      color: var(--primary);
+    }
+
+    .analysis-panel { display: none; }
+    .analysis-panel.active { display: block; }
+
+    .analysis-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .analysis-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      line-height: 1.5;
+      transition: border-color var(--ease);
+    }
+
+    .analysis-list li:hover {
+      border-color: color-mix(in srgb, var(--primary) 22%, var(--border));
+    }
+
+    .analysis-list li i {
+      color: var(--primary);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* --- Findings cards --- */
+    .findings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .finding-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 22px;
+      transition: border-color var(--ease), box-shadow var(--ease), transform var(--ease);
+    }
+
+    .finding-card:hover {
+      border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-3px);
+    }
+
+    .finding-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--r-md);
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 14px;
+    }
+
+    .finding-title {
+      font-size: var(--text-sm);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .finding-desc {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* --- Recommendations --- */
+    .rec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+    }
+
+    .rec-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 22px;
+      border-left: 3px solid transparent;
+      transition: border-color var(--ease), transform var(--ease);
+    }
+
+    /* keep a very subtle left accent only on rec cards — not generic cards */
+    .rec-card { border-left-color: var(--primary); }
+
+    .rec-card:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .rec-num {
+      font-size: var(--text-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .rec-title {
+      font-size: var(--text-sm);
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .rec-desc {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* --- Tools section --- */
+    .tools-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tool-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--r-pill);
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: all var(--ease);
+    }
+
+    .tool-badge:hover {
+      background: var(--primary-soft);
+      border-color: color-mix(in srgb, var(--primary) 30%, transparent);
+      color: var(--primary);
+    }
+
+    .tool-badge i { color: var(--primary); }
+
+    /* --- Screenshots placeholder --- */
+    .screenshot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .screenshot-placeholder {
+      aspect-ratio: 16/9;
+      border-radius: var(--r-lg);
+      background: var(--surface-2);
+      border: 2px dashed var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--text-faint);
+      font-size: var(--text-sm);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .screenshot-placeholder i { font-size: 2rem; color: var(--text-faint); }
+
+    /* actual screenshots once added */
+    .screenshot-img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      border-radius: var(--r-lg);
+      border: 1px solid var(--border);
+      display: block;
+      cursor: zoom-in;
+      transition: transform var(--ease), box-shadow var(--ease);
+    }
+
+    .screenshot-img:hover {
+      transform: scale(1.02);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .screenshot-caption {
+      font-size: var(--text-xs);
+      color: var(--text-faint);
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    /* --- Lightbox --- */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: oklch(0.08 0 0 / 0.88);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 85vh;
+      border-radius: var(--r-lg);
+      object-fit: contain;
+    }
+
+    .lightbox-close {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    /* --- Files section --- */
+    .files-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.file-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.file-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.file-card-top i {
+  font-size: 1.6rem;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.file-name {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.file-desc {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+    .files-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 48px 24px;
+      border: 2px dashed var(--border);
+      border-radius: var(--r-xl);
+      color: var(--text-faint);
+      text-align: center;
+    }
+
+    .files-empty i { font-size: 2.4rem; }
+
+    /* --- Next project bar --- */
+    .proj-next {
+      padding-block: 32px;
+      background: var(--surface);
+      border-top: 1px solid var(--divider);
+    }
+
+    .proj-next-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    /* Footer */
+    .site-footer {
+      padding-block: 26px;
+      border-top: 1px solid var(--divider);
+      font-size: var(--text-sm);
+      color: var(--text-faint);
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 900px) {
+      .proj-hero-inner { grid-template-columns: 1fr; }
+      .proj-hero-card { min-width: unset; }
+      .proj-two-col { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .proj-stat { min-width: 100px; padding: 12px 14px; }
+      .proj-hero-stats { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================
+       HEADER
+       ========================= -->
+  <header class="site-header">
+    <nav class="navbar" aria-label="Project page navigation">
+      <div class="wrap d-flex justify-content-between align-items-center gap-3">
+
+        <a class="navbar-brand" href="index.html">
+          <span class="brand-logo" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+          </span>
+          Pranshu Agrawal
+        </a>
+
+        <div class="d-flex align-items-center gap-2">
+          <a class="btn-outline-swiss btn-sm-swiss" href="index.html#projects">
+            <i class="bi bi-arrow-left"></i> All projects
+          </a>
+          <a class="btn-outline-swiss btn-sm-swiss" href="resume.html">
+            <i class="bi bi-file-earmark-person"></i> Resume
+          </a>
+          <button class="theme-btn" type="button" data-theme-toggle aria-label="Toggle theme">
+            <i class="bi bi-moon-stars-fill"></i>
+          </button>
+        </div>
+
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- =========================
+         HERO
+         ========================= -->
+    <section class="proj-hero">
+      <div class="wrap">
+        <div class="proj-hero-inner">
+
+          <div>
+            <!-- Breadcrumb -->
+            <nav class="proj-hero-breadcrumb" aria-label="Breadcrumb">
+              <a href="index.html">Home</a>
+              <i class="bi bi-chevron-right"></i>
+              <a href="index.html#projects">Projects</a>
+              <i class="bi bi-chevron-right"></i>
+              <span>FP&amp;A Dashboard</span>
+            </nav>
+
+            <h1 class="proj-hero-title" data-aos="fade-up">
+              FP&amp;A &amp; Business<br>Performance Dashboard
+            </h1>
+
+            <p class="proj-hero-desc" data-aos="fade-up" data-aos-delay="60">
+              A Power BI dashboard providing centralized business intelligence for financial planning
+              and analysis. Delivers comprehensive insights across revenue, profitability, products,
+              customers, regions, and cash flows for data-driven decision making.
+            </p>
+
+            <div class="proj-hero-tags" data-aos="fade-up" data-aos-delay="100">
+              <span class="chip chip-primary">Power BI</span>
+              <span class="chip chip-primary">DAX</span>
+              <span class="chip chip-primary">Power Query</span>
+              <span class="chip">FP&amp;A</span>
+              <span class="chip">MIS Reporting</span>
+              <span class="chip">Variance Analysis</span>
+              <span class="chip">Cash Flow</span>
+              <span class="chip chip-success">
+                <i class="bi bi-check-circle-fill"></i>&nbsp; Completed
+              </span>
+            </div>
+
+            <!-- Stats bar -->
+            <div class="proj-hero-stats" data-aos="fade-up" data-aos-delay="140">
+              <div class="proj-stat">
+                <div class="proj-stat-num">25K+</div>
+                <div class="proj-stat-label">Sales records</div>
+              </div>
+              <div class="proj-stat">
+                <div class="proj-stat-num">500</div>
+                <div class="proj-stat-label">Customers</div>
+              </div>
+              <div class="proj-stat">
+                <div class="proj-stat-num">200</div>
+                <div class="proj-stat-label">Products</div>
+              </div>
+              <div class="proj-stat">
+                <div class="proj-stat-num">4</div>
+                <div class="proj-stat-label">Regions</div>
+              </div>
+              <div class="proj-stat">
+                <div class="proj-stat-num">24mo</div>
+                <div class="proj-stat-label">Coverage</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Side info card -->
+          <div class="proj-hero-card" data-aos="fade-left">
+            <div class="proj-info-row">
+              <span class="proj-info-label">Category</span>
+              <span class="proj-info-value">FP&amp;A / BI Dashboard</span>
+            </div>
+            <div class="proj-info-row">
+              <span class="proj-info-label">Primary tool</span>
+              <span class="proj-info-value">Power BI</span>
+            </div>
+            <div class="proj-info-row">
+              <span class="proj-info-label">Data source</span>
+              <span class="proj-info-value">Simulated dataset</span>
+            </div>
+            <div class="proj-info-row">
+              <span class="proj-info-label">Period</span>
+              <span class="proj-info-value">24 months</span>
+            </div>
+            <div class="proj-info-row">
+              <span class="proj-info-label">Status</span>
+              <span class="proj-info-value" style="color:var(--success);">
+                <i class="bi bi-check-circle-fill"></i> Completed
+              </span>
+            </div>
+            <a class="btn-swiss" href="index.html#contact">
+              <i class="bi bi-envelope"></i> Discuss this project
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         OVERVIEW
+         ========================= -->
+    <section class="proj-section">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Overview</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Project overview</h2>
+
+        <div class="proj-two-col">
+          <div data-aos="fade-up">
+            <p style="color:var(--text-muted); line-height:1.8; font-size:var(--text-base); max-width:none;">
+              This project analyzes business performance across revenue, profitability, customer segments,
+              products, regions, and cash flows. The dashboard was developed to provide management with
+              a consolidated view of financial performance and support data-driven decision making.
+            </p>
+            <p style="color:var(--text-muted); line-height:1.8; font-size:var(--text-base); max-width:none; margin-top:16px;">
+              Management required a centralized Business Intelligence (BI) Dashboard to consolidate
+              fragmented financial and operational data into a single source of truth. This solution
+              automates data ingestion from ERP, CRM, and accounting systems to deliver real-time,
+              actionable insights.
+            </p>
+          </div>
+
+          <!-- Business problem card -->
+          <div class="problem-card" data-aos="fade-up" data-aos-delay="60">
+            <div class="proj-section-label" style="margin-bottom:14px;">
+              <i class="bi bi-exclamation-circle-fill"></i>&nbsp; Business problem
+            </div>
+            <p style="font-size:var(--text-sm); color:var(--text-muted); margin-bottom:14px; max-width:none; line-height:1.7;">
+              Management required a centralized reporting solution to:
+            </p>
+            <ul style="list-style:none; padding:0; margin:0; display:grid; gap:9px;">
+              <li style="display:flex; align-items:flex-start; gap:10px; font-size:var(--text-sm); color:var(--text-muted);">
+                <i class="bi bi-arrow-right-circle-fill" style="color:var(--primary); flex-shrink:0; margin-top:2px;"></i>
+                Monitor revenue and profitability trends
+              </li>
+              <li style="display:flex; align-items:flex-start; gap:10px; font-size:var(--text-sm); color:var(--text-muted);">
+                <i class="bi bi-arrow-right-circle-fill" style="color:var(--primary); flex-shrink:0; margin-top:2px;"></i>
+                Track customer and product performance
+              </li>
+              <li style="display:flex; align-items:flex-start; gap:10px; font-size:var(--text-sm); color:var(--text-muted);">
+                <i class="bi bi-arrow-right-circle-fill" style="color:var(--primary); flex-shrink:0; margin-top:2px;"></i>
+                Analyze regional sales contribution
+              </li>
+              <li style="display:flex; align-items:flex-start; gap:10px; font-size:var(--text-sm); color:var(--text-muted);">
+                <i class="bi bi-arrow-right-circle-fill" style="color:var(--primary); flex-shrink:0; margin-top:2px;"></i>
+                Review cash flow movements
+              </li>
+              <li style="display:flex; align-items:flex-start; gap:10px; font-size:var(--text-sm); color:var(--text-muted);">
+                <i class="bi bi-arrow-right-circle-fill" style="color:var(--primary); flex-shrink:0; margin-top:2px;"></i>
+                Compare actual performance against business targets
+              </li>
+            </ul>
+            <p style="font-size:var(--text-xs); color:var(--text-faint); margin-top:16px; margin-bottom:0; max-width:none; line-height:1.65;">
+              Without a consolidated dashboard, decision-makers struggled with fragmented data sources,
+              delayed reporting, and inability to quickly identify performance trends and anomalies.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         DATA USED
+         ========================= -->
+    <section class="proj-section" style="background:var(--surface);">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Dataset</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Data used</h2>
+
+        <p style="color:var(--text-muted); max-width:600px; margin-bottom:28px; font-size:var(--text-sm); line-height:1.7;" data-aos="fade-up">
+          <strong>Source:</strong> Simulated business dataset created for FP&amp;A and business intelligence
+          reporting purposes. &nbsp;<strong>Coverage period:</strong> 24 months of data.
+        </p>
+
+        <div class="data-grid" data-aos="fade-up">
+          <div class="data-card">
+            <div class="data-card-num">25K+</div>
+            <div class="data-card-label">Sales records</div>
+            <div class="data-card-sub">Sales transactions table</div>
+          </div>
+          <div class="data-card">
+            <div class="data-card-num">500</div>
+            <div class="data-card-label">Customers</div>
+            <div class="data-card-sub">Customer master records</div>
+          </div>
+          <div class="data-card">
+            <div class="data-card-num">200</div>
+            <div class="data-card-label">Products</div>
+            <div class="data-card-sub">Across product categories</div>
+          </div>
+          <div class="data-card">
+            <div class="data-card-num">4</div>
+            <div class="data-card-label">Regions</div>
+            <div class="data-card-sub">Business region coverage</div>
+          </div>
+          <div class="data-card">
+            <div class="data-card-num">24mo</div>
+            <div class="data-card-label">Budget data</div>
+            <div class="data-card-sub">Budget target timeline</div>
+          </div>
+          <div class="data-card">
+            <div class="data-card-num">3</div>
+            <div class="data-card-label">Cash flow types</div>
+            <div class="data-card-sub">Operating, investing, financing</div>
+          </div>
+          <div class="data-card">
+            <div class="data-card-num">1</div>
+            <div class="data-card-label">Calendar table</div>
+            <div class="data-card-sub">Time intelligence dimension</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         METHODOLOGY
+         ========================= -->
+    <section class="proj-section">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Methodology</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Approach &amp; methodology</h2>
+
+        <div class="method-steps" data-aos="fade-up">
+          <div class="method-step">
+            <div class="method-step-num">1</div>
+            <div>
+              <div class="method-step-title">Data model architecture</div>
+              <p class="method-step-desc">Built data model connecting Sales, Customer, Product, Budget, and Cash Flow tables with proper relationships and cardinality.</p>
+            </div>
+          </div>
+
+          <div class="method-step">
+            <div class="method-step-num">2</div>
+            <div>
+              <div class="method-step-title">Power Query transformation</div>
+              <p class="method-step-desc">Used Power Query for data cleaning, transformation, and integration across multiple source tables.</p>
+            </div>
+          </div>
+
+          <div class="method-step">
+            <div class="method-step-num">3</div>
+            <div>
+              <div class="method-step-title">DAX measure development</div>
+              <p class="method-step-desc">Developed DAX measures for KPIs including revenue, profit margins, variance calculations, and time intelligence functions.</p>
+            </div>
+          </div>
+
+          <div class="method-step">
+            <div class="method-step-num">4</div>
+            <div>
+              <div class="method-step-title">Interactive dashboard design</div>
+              <p class="method-step-desc">Created interactive dashboards with KPI cards, trend visuals, and dynamic filters for management-facing reporting.</p>
+            </div>
+          </div>
+
+          <div class="method-step">
+            <div class="method-step-num">5</div>
+            <div>
+              <div class="method-step-title">Drill-through and time intelligence</div>
+              <p class="method-step-desc">Implemented drill-through functionality for detailed analysis and added YoY and MoM time comparisons throughout.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         ANALYSIS PERFORMED
+         ========================= -->
+    <section class="proj-section" style="background:var(--surface);">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Analysis</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Analysis performed</h2>
+
+        <!-- Tab navigation -->
+        <div class="analysis-tabs" data-aos="fade-up" role="tablist">
+          <button class="analysis-tab active" data-panel="revenue" role="tab" aria-selected="true">Revenue</button>
+          <button class="analysis-tab" data-panel="profitability" role="tab" aria-selected="false">Profitability</button>
+          <button class="analysis-tab" data-panel="customer" role="tab" aria-selected="false">Customer</button>
+          <button class="analysis-tab" data-panel="product" role="tab" aria-selected="false">Product</button>
+          <button class="analysis-tab" data-panel="budget" role="tab" aria-selected="false">Budget &amp; Variance</button>
+          <button class="analysis-tab" data-panel="cashflow" role="tab" aria-selected="false">Cash Flow</button>
+        </div>
+
+        <!-- Panels -->
+        <div id="panel-revenue" class="analysis-panel active" data-aos="fade-up">
+          <ul class="analysis-list">
+            <li><i class="bi bi-graph-up-arrow"></i>Revenue Trend Analysis — monthly and quarterly revenue movement over the 24-month coverage period.</li>
+            <li><i class="bi bi-globe-americas"></i>Regional Revenue Comparison — contribution breakdown across the four business regions.</li>
+            <li><i class="bi bi-pie-chart"></i>Category-wise Revenue Contribution — product category revenue split and mix.</li>
+            <li><i class="bi bi-people"></i>Customer Segment Revenue Analysis — revenue performance by customer segment and tier.</li>
+          </ul>
+        </div>
+
+        <div id="panel-profitability" class="analysis-panel">
+          <ul class="analysis-list">
+            <li><i class="bi bi-cash-coin"></i>Gross Profit Calculation — revenue less cost of goods sold across categories and periods.</li>
+            <li><i class="bi bi-percent"></i>Profit Margin Analysis — margin tracking and trend at overall and category level.</li>
+            <li><i class="bi bi-bar-chart"></i>Category Profitability Assessment — comparing profit contribution per product category.</li>
+            <li><i class="bi bi-box-seam"></i>Product Performance Evaluation — individual product-level profitability and margin review.</li>
+          </ul>
+        </div>
+
+        <div id="panel-customer" class="analysis-panel">
+          <ul class="analysis-list">
+            <li><i class="bi bi-diagram-3"></i>Customer Segmentation Analysis — segmenting customers by type, value, and buying behavior.</li>
+            <li><i class="bi bi-bar-chart-steps"></i>Revenue Contribution by Segment — understanding which customer segments drive the most revenue.</li>
+            <li><i class="bi bi-trophy"></i>Top Customer Identification — identifying high-value accounts and key client concentration.</li>
+            <li><i class="bi bi-exclamation-circle"></i>Customer Concentration Assessment — evaluating revenue risk from over-reliance on key customers.</li>
+          </ul>
+        </div>
+
+        <div id="panel-product" class="analysis-panel">
+          <ul class="analysis-list">
+            <li><i class="bi bi-award"></i>Top-performing Products — ranking products by revenue, margin, and volume contribution.</li>
+            <li><i class="bi bi-bar-chart-line"></i>Category Performance Comparison — cross-category benchmarking on revenue and profitability.</li>
+            <li><i class="bi bi-layers"></i>Subcategory Contribution Analysis — drilling into subcategory-level performance within main categories.</li>
+            <li><i class="bi bi-currency-dollar"></i>Product Profitability Review — identifying high-margin and low-margin products for action.</li>
+          </ul>
+        </div>
+
+        <div id="panel-budget" class="analysis-panel">
+          <ul class="analysis-list">
+            <li><i class="bi bi-bullseye"></i>Actual vs Budget Comparison — tracking actual financial results against budgeted targets.</li>
+            <li><i class="bi bi-arrow-left-right"></i>Revenue Variance Calculation — calculating favorable and unfavorable revenue variances.</li>
+            <li><i class="bi bi-check2-circle"></i>Budget Attainment Tracking — measuring % attainment of budget targets across periods.</li>
+            <li><i class="bi bi-geo-alt"></i>Regional Performance Against Targets — regional variance analysis against budgeted objectives.</li>
+          </ul>
+        </div>
+
+        <div id="panel-cashflow" class="analysis-panel">
+          <ul class="analysis-list">
+            <li><i class="bi bi-activity"></i>Operating Cash Flow Trends — movement and trends in core operating cash generation.</li>
+            <li><i class="bi bi-building"></i>Investing Cash Flow Review — capital expenditure and investment cash activity analysis.</li>
+            <li><i class="bi bi-bank"></i>Financing Cash Flow Analysis — debt, equity, and financing activity review.</li>
+            <li><i class="bi bi-droplet-half"></i>Overall Liquidity Assessment — combined cash flow review for organizational liquidity position.</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================
+         KEY FINDINGS
+         ========================= -->
+    <section class="proj-section">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Findings</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Key findings</h2>
+
+        <div class="findings-grid">
+          <div class="finding-card" data-aos="fade-up">
+            <div class="finding-icon"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="finding-title">Consistent Revenue Growth</div>
+            <p class="finding-desc">Revenue showed consistent growth throughout the reporting period, indicating strong business performance and market demand.</p>
+          </div>
+
+          <div class="finding-card" data-aos="fade-up" data-aos-delay="60">
+            <div class="finding-icon"><i class="bi bi-geo-alt-fill"></i></div>
+            <div class="finding-title">West Region Leadership</div>
+            <p class="finding-desc">West region generated the highest revenue, demonstrating superior regional performance and market penetration.</p>
+          </div>
+
+          <div class="finding-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="finding-icon"><i class="bi bi-cpu"></i></div>
+            <div class="finding-title">Technology Product Strength</div>
+            <p class="finding-desc">Technology products delivered the strongest profitability, highlighting high-margin product opportunities for scale.</p>
+          </div>
+
+          <div class="finding-card" data-aos="fade-up" data-aos-delay="140">
+            <div class="finding-icon"><i class="bi bi-buildings"></i></div>
+            <div class="finding-title">Corporate Customer Dominance</div>
+            <p class="finding-desc">Corporate customers contributed the largest revenue share, indicating significant enterprise relationship value and dependency.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         RECOMMENDATIONS
+         ========================= -->
+    <section class="proj-section" style="background:var(--surface);">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Recommendations</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Strategic recommendations</h2>
+
+        <div class="rec-grid">
+          <div class="rec-card" data-aos="fade-up">
+            <div class="rec-num">01 — Focus</div>
+            <div class="rec-title">Focus on High-Margin Categories</div>
+            <p class="rec-desc">Aggressively scale technology products and high-margin segments to drive immediate profitability improvements across the business.</p>
+          </div>
+
+          <div class="rec-card" data-aos="fade-up" data-aos-delay="60">
+            <div class="rec-num">02 — Regional</div>
+            <div class="rec-title">Improve Underperforming Regions</div>
+            <p class="rec-desc">Address regional performance gaps by fixing operational leaks in weaker regions while maintaining the West region's market strength.</p>
+          </div>
+
+          <div class="rec-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="rec-num">03 — Retention</div>
+            <div class="rec-title">Strengthen Customer Retention Programs</div>
+            <p class="rec-desc">Enhance retention initiatives for corporate customers who drive the largest revenue share to secure long-term stability and growth.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         TOOLS USED
+         ========================= -->
+    <section class="proj-section">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Tools</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Tools used</h2>
+
+        <div class="tools-row" data-aos="fade-up">
+          <div class="tool-badge">
+            <i class="bi bi-bar-chart-fill"></i>
+            Power BI Desktop
+          </div>
+          <div class="tool-badge">
+            <i class="bi bi-funnel-fill"></i>
+            Power Query (M Language)
+          </div>
+          <div class="tool-badge">
+            <i class="bi bi-braces"></i>
+            DAX (Data Analysis Expressions)
+          </div>
+          <div class="tool-badge">
+            <i class="bi bi-file-earmark-spreadsheet"></i>
+            Microsoft Excel
+          </div>
+          <div class="tool-badge">
+            <i class="bi bi-database"></i>
+            SQL
+          </div>
+          <div class="tool-badge">
+            <i class="bi bi-diagram-3"></i>
+            Star Schema Data Modeling
+          </div>
+          <div class="tool-badge">
+            <i class="bi bi-calendar3"></i>
+            Time Intelligence Functions
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         FILES
+         ========================= -->
+    <section class="proj-section" style="background:var(--surface);">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Files</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Project files</h2>
+
+<div class="files-grid">
+  <div class="file-card">
+    <div class="file-card-top">
+      <i class="bi bi-file-earmark-spreadsheet"></i>
+      <div>
+        <div class="file-name">FP&A Dashboard.xlsx</div>
+        <div class="file-desc">Excel model with calculations, budget logic, and supporting data.</div>
+      </div>
+    </div>
+    <a class="btn-swiss btn-sm-swiss" href="./assets/fpa-dashboard.xlsx" download>
+      Open file
+    </a>
+  </div>
+
+  <div class="file-card">
+    <div class="file-card-top">
+      <i class="bi bi-file-earmark-bar-graph"></i>
+      <div>
+        <div class="file-name">FP&A Dashboard.pbix</div>
+        <div class="file-desc">Power BI dashboard file for business performance reporting.</div>
+      </div>
+    </div>
+    <a class="btn-swiss btn-sm-swiss" href="./assets/fpa-dashboard.pbix" download>
+      Open file
+    </a>
+  </div>
+</div>
+
+   
+    </section>
+
+    <!-- =========================
+         SCREENSHOTS
+         ========================= -->
+    <section class="proj-section">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Screenshots</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Dashboard screenshots</h2>
+
+        <p style="color:var(--text-muted); font-size:var(--text-sm); max-width:600px; margin-bottom:28px;" data-aos="fade-up">
+          Dashboard screenshots will be added here. Click any screenshot to view it full size.
+        </p>
+
+        <div class="screenshot-grid" data-aos="fade-up">
+          <div class="screenshot-placeholder">
+            <i class="bi bi-display"></i>
+            <span>Executive Summary Dashboard<br><small>KPI cards and overview metrics</small></span>
+          </div>
+          <div class="screenshot-placeholder">
+            <i class="bi bi-graph-up-arrow"></i>
+            <span>Revenue Trend Analysis<br><small>Regional breakdown and trend charts</small></span>
+          </div>
+          <div class="screenshot-placeholder">
+            <i class="bi bi-currency-dollar"></i>
+            <span>Profitability Dashboard<br><small>By product and category</small></span>
+          </div>
+          <div class="screenshot-placeholder">
+            <i class="bi bi-people"></i>
+            <span>Customer Segment Analysis<br><small>Segment contribution and top customers</small></span>
+          </div>
+          <div class="screenshot-placeholder">
+            <i class="bi bi-bullseye"></i>
+            <span>Budget vs Actual Variance<br><small>Variance dashboard by region and period</small></span>
+          </div>
+          <div class="screenshot-placeholder">
+            <i class="bi bi-droplet-half"></i>
+            <span>Cash Flow Analysis<br><small>Operating, investing, and financing flows</small></span>
+          </div>
+        </div>
+
+        <!-- To use real screenshots, replace .screenshot-placeholder divs with:
+        <div>
+          <img src="assets/screenshots/fpa-executive.png" alt="Executive Summary Dashboard" class="screenshot-img" loading="lazy" width="800" height="450">
+          <p class="screenshot-caption">Executive Summary Dashboard — KPI overview</p>
+        </div>
+        -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================
+       NEXT PROJECT
+       ========================= -->
+  <div class="proj-next">
+    <div class="wrap">
+      <div class="proj-next-inner">
+        <div>
+          <span class="label-sm">Next project</span>
+          <p style="font-size:var(--text-base); font-weight:600; color:var(--text); margin-bottom:0; margin-top:4px;">
+            CMA Projection Model
+          </p>
+        </div>
+        <a class="btn-swiss" href="project-cma.html">
+          View next project <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Screenshot viewer">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close lightbox">&times;</button>
+    <img src="" id="lightboxImg" alt="Screenshot full view">
+  </div>
+
+  <!-- =========================
+       FOOTER
+       ========================= -->
+  <footer class="site-footer">
+    <div class="wrap d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <span>© 2026 Pranshu Agrawal — Financial Analyst Portfolio</span>
+      <div class="d-flex gap-2 flex-wrap">
+        <a class="btn-outline-swiss btn-sm-swiss" href="index.html">
+          <i class="bi bi-house"></i> Home
+        </a>
+        <a class="btn-outline-swiss btn-sm-swiss" href="index.html#projects">
+          <i class="bi bi-grid-3x3-gap"></i> All projects
+        </a>
+        <a class="btn-outline-swiss btn-sm-swiss" href="resume.html">
+          <i class="bi bi-file-earmark-person"></i> Resume
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================
+       SCRIPTS
+       ========================= -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <script>
+    /* AOS */
+    AOS.init({ duration: 520, once: true, offset: 60 });
+
+    /* Theme toggle */
+    (function () {
+      const root   = document.documentElement;
+      const toggle = document.querySelector('[data-theme-toggle]');
+      if (!toggle) return;
+      let theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      root.setAttribute('data-theme', theme);
+      function updateIcon() {
+        toggle.innerHTML = theme === 'dark'
+          ? '<i class="bi bi-sun-fill"></i>'
+          : '<i class="bi bi-moon-stars-fill"></i>';
+      }
+      updateIcon();
+      toggle.addEventListener('click', function () {
+        theme = theme === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', theme);
+        updateIcon();
+      });
+    })();
+
+    /* Analysis tabs */
+    (function () {
+      const tabs   = document.querySelectorAll('.analysis-tab');
+      const panels = document.querySelectorAll('.analysis-panel');
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          tabs.forEach(function (t) {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          panels.forEach(function (p) { p.classList.remove('active'); });
+
+          tab.classList.add('active');
+          tab.setAttribute('aria-selected', 'true');
+          var target = document.getElementById('panel-' + tab.dataset.panel);
+          if (target) target.classList.add('active');
+        });
+      });
+    })();
+
+    /* Lightbox for screenshots */
+    (function () {
+      const lightbox = document.getElementById('lightbox');
+      const lbImg    = document.getElementById('lightboxImg');
+      const lbClose  = document.getElementById('lightboxClose');
+
+      document.querySelectorAll('.screenshot-img').forEach(function (img) {
+        img.addEventListener('click', function () {
+          lbImg.src = img.src;
+          lbImg.alt = img.alt;
+          lightbox.classList.add('open');
+        });
+      });
+
+      function closeLb() { lightbox.classList.remove('open'); lbImg.src = ''; }
+      lbClose.addEventListener('click', closeLb);
+      lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLb(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeLb(); });
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GST Analytics Dashboard — Pranshu Agrawal</title>
+  <meta
+    name="description"
+    content="A Power BI dashboard for GST compliance tracking, liability monitoring, filing trend analysis, and monthly reconciliation. Provides exception analysis and mismatch detection."
+  />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap"
+    rel="stylesheet"
+  >
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    .proj-hero {
+      padding-block: clamp(48px, 7vw, 100px);
+      border-bottom: 1px solid var(--divider);
+      background: var(--surface);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .proj-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .proj-hero-inner {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .proj-hero-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: var(--text-xs);
+      color: var(--text-faint);
+      margin-bottom: 20px;
+    }
+    .proj-hero-breadcrumb a { color: var(--text-faint); text-decoration: none; }
+    .proj-hero-breadcrumb a:hover { color: var(--primary); }
+    .proj-hero-breadcrumb i { font-size: 0.65rem; }
+
+    .proj-hero-title {
+      font-size: clamp(1.8rem, 1rem + 3vw, 3.2rem);
+      line-height: 1.1;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .proj-hero-desc {
+      font-size: var(--text-base);
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+
+    .proj-hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .in-progress-banner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      background: color-mix(in srgb, var(--warning, #b07a00) 8%, var(--surface));
+      border: 1px solid color-mix(in srgb, var(--warning, #b07a00) 22%, var(--border));
+      border-radius: var(--r-lg);
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+    .in-progress-banner i { color: var(--gold, #d19900); flex-shrink: 0; font-size: 1.1rem; }
+
+    .proj-hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      background: var(--surface-2);
+    }
+
+    .proj-stat {
+      flex: 1;
+      min-width: 110px;
+      padding: 16px 18px;
+      border-right: 1px solid var(--border);
+      text-align: center;
+    }
+    .proj-stat:last-child { border-right: none; }
+    .proj-stat-num { font-size: var(--text-xl); font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 4px; }
+    .proj-stat-label { font-size: var(--text-xs); color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.1em; }
+
+    .proj-hero-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 24px;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .proj-info-row { display: flex; flex-direction: column; gap: 3px; }
+    .proj-info-label { font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-faint); }
+    .proj-info-value { font-size: var(--text-sm); font-weight: 600; color: var(--text); }
+
+    .proj-section {
+      padding-block: clamp(36px, 5vw, 64px);
+      border-bottom: 1px solid var(--divider);
+    }
+    .proj-section:last-of-type { border-bottom: none; }
+
+    .proj-section-label {
+      font-size: var(--text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .proj-section-title {
+      font-size: clamp(1.25rem, 0.8rem + 1.5vw, 2rem);
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .proj-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .problem-card {
+      background: color-mix(in srgb, var(--primary) 5%, var(--surface));
+      border: 1px solid color-mix(in srgb, var(--primary) 18%, var(--border));
+      border-radius: var(--r-xl);
+      padding: 28px;
+    }
+
+    .focus-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .focus-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 18px 16px;
+      transition: border-color var(--ease), transform var(--ease);
+    }
+    .focus-card:hover {
+      border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
+      transform: translateY(-3px);
+    }
+
+    .focus-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--r-md);
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      margin-bottom: 12px;
+    }
+
+    .focus-title { font-size: var(--text-sm); font-weight: 700; color: var(--text); margin-bottom: 5px; }
+    .focus-desc { font-size: var(--text-xs); color: var(--text-muted); line-height: 1.55; margin: 0; }
+
+    .analysis-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .analysis-tab {
+      padding: 8px 18px;
+      border-radius: var(--r-pill);
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--ease);
+    }
+    .analysis-tab.active,
+    .analysis-tab:hover {
+      background: var(--primary-soft);
+      border-color: color-mix(in srgb, var(--primary) 30%, transparent);
+      color: var(--primary);
+    }
+
+    .analysis-panel { display: none; }
+    .analysis-panel.active { display: block; }
+
+    .analysis-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+    .analysis-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      line-height: 1.5;
+      transition: border-color var(--ease);
+    }
+    .analysis-list li:hover { border-color: color-mix(in srgb, var(--primary) 22%, var(--border)); }
+    .analysis-list li i { color: var(--primary); flex-shrink: 0; margin-top: 2px; }
+
+    .findings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .finding-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 22px;
+      transition: border-color var(--ease), box-shadow var(--ease), transform var(--ease);
+    }
+    .finding-card:hover {
+      border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-3px);
+    }
+
+    .finding-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--r-md);
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 14px;
+    }
+
+    .finding-title { font-size: var(--text-sm); font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .finding-desc { font-size: var(--text-sm); color: var(--text-muted); line-height: 1.6; margin: 0; }
+
+    .rec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .rec-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--primary);
+      border-radius: var(--r-lg);
+      padding: 22px;
+      transition: transform var(--ease), box-shadow var(--ease);
+    }
+    .rec-card:hover { transform: translateX(4px); box-shadow: var(--shadow-sm); }
+
+    .rec-num { font-size: var(--text-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--primary); margin-bottom: 8px; }
+    .rec-title { font-size: var(--text-sm); font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .rec-bullets { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+    .rec-bullets li {
+      position: relative;
+      padding-left: 14px;
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+    .rec-bullets li::before { content: "–"; position: absolute; left: 0; color: var(--primary); font-weight: 700; }
+
+    .tools-row { display: flex; flex-wrap: wrap; gap: 12px; }
+    .tool-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--r-pill);
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: all var(--ease);
+    }
+    .tool-badge:hover {
+      background: var(--primary-soft);
+      border-color: color-mix(in srgb, var(--primary) 30%, transparent);
+      color: var(--primary);
+    }
+    .tool-badge i { color: var(--primary); }
+
+    .files-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 48px 24px;
+      border: 2px dashed var(--border);
+      border-radius: var(--r-xl);
+      color: var(--text-faint);
+      text-align: center;
+    }
+
+    .screenshot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .screenshot-placeholder {
+      aspect-ratio: 16/9;
+      border-radius: var(--r-lg);
+      background: var(--surface-2);
+      border: 2px dashed var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--text-faint);
+      font-size: var(--text-sm);
+      padding: 20px;
+      text-align: center;
+    }
+    .screenshot-placeholder i { font-size: 2rem; color: var(--text-faint); }
+
+    .proj-next { padding-block: 32px; background: var(--surface); border-top: 1px solid var(--divider); }
+    .proj-next-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+
+    .site-footer { padding-block: 26px; border-top: 1px solid var(--divider); font-size: var(--text-sm); color: var(--text-faint); }
+
+    @media (max-width: 900px) {
+      .proj-hero-inner { grid-template-columns: 1fr; }
+      .proj-hero-card { min-width: unset; }
+      .proj-two-col { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="navbar" aria-label="Project page navigation">
+      <div class="wrap d-flex justify-content-between align-items-center gap-3">
+        <a class="navbar-brand" href="index.html">
+          <span class="brand-logo" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+          </span>
+          Pranshu Agrawal
+        </a>
+        <div class="d-flex align-items-center gap-2">
+          <a class="btn-outline-swiss btn-sm-swiss" href="index.html#projects">
+            <i class="bi bi-arrow-left"></i> All projects
+          </a>
+          <a class="btn-outline-swiss btn-sm-swiss" href="resume.html">
+            <i class="bi bi-file-earmark-person"></i> Resume
+          </a>
+          <button class="theme-btn" type="button" data-theme-toggle aria-label="Toggle theme">
+            <i class="bi bi-moon-stars-fill"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="proj-hero">
+      <div class="wrap">
+        <div class="proj-hero-inner">
+          <div>
+            <nav class="proj-hero-breadcrumb" aria-label="Breadcrumb">
+              <a href="index.html">Home</a>
+              <i class="bi bi-chevron-right"></i>
+              <a href="index.html#projects">Projects</a>
+              <i class="bi bi-chevron-right"></i>
+              <span>GST Dashboard</span>
+            </nav>
+
+            <div class="in-progress-banner" data-aos="fade-up">
+              <i class="bi bi-clock-history"></i>
+              <span><strong>In Progress</strong> — This project is currently under development. Compliance metrics and screenshots will be expanded on completion.</span>
+            </div>
+
+            <h1 class="proj-hero-title" data-aos="fade-up">
+              GST Analytics Dashboard
+            </h1>
+
+            <p class="proj-hero-desc" data-aos="fade-up" data-aos-delay="60">
+              A Power BI dashboard for GST compliance tracking, liability monitoring, filing trend analysis, and monthly reconciliation. It provides exception analysis and mismatch detection to identify filing issues early.
+            </p>
+
+            <div class="proj-hero-tags" data-aos="fade-up" data-aos-delay="100">
+              <span class="chip chip-primary">Power BI</span>
+              <span class="chip chip-primary">GST Compliance</span>
+              <span class="chip chip-primary">Reconciliation</span>
+              <span class="chip">ITC Analysis</span>
+              <span class="chip">Mismatch Detection</span>
+              <span class="chip">Filing Trends</span>
+              <span class="chip" style="background:color-mix(in srgb,var(--gold,#d19900) 12%,var(--surface-2)); border-color:color-mix(in srgb,var(--gold,#d19900) 28%,var(--border)); color:var(--gold,#d19900);">
+                <i class="bi bi-clock"></i>&nbsp; In Progress
+              </span>
+            </div>
+
+            <div class="proj-hero-stats" data-aos="fade-up" data-aos-delay="140">
+              <div class="proj-stat">
+                <div class="proj-stat-num">GSTR-1</div>
+                <div class="proj-stat-label">Returns</div>
+              </div>
+              <div class="proj-stat">
+                <div class="proj-stat-num">GSTR-3B</div>
+                <div class="proj-stat-label">Filing</div>
+              </div>
+              <div class="proj-stat">
+                <div class="proj-stat-num">ITC</div>
+                <div class="proj-stat-label">Utilization</div>
+              </div>
+              <div class="proj-stat">
+                <div class="proj-stat-num">100%</div>
+                <div class="proj-stat-label">Compliance focus</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="proj-hero-card" data-aos="fade-left">
+            <div class="proj-info-row">
+              <span class="proj-info-label">Category</span>
+              <span class="proj-info-value">GST / Power BI Dashboard</span>
+            </div>
+            <div class="proj-info-row">
+              <span class="proj-info-label">Primary tool</span>
+              <span class="proj-info-value">Power BI</span>
+            </div>
+            <div class="proj-info-row">
+              <span class="proj-info-label">Data source</span>
+              <span class="proj-info-value">Returns, registers &amp; filing records</span>
+            </div>
+            <div class="proj-info-row">
+              <span class="proj-info-label">Focus</span>
+              <span class="proj-info-value">Liability, compliance &amp; mismatch alerts</span>
+            </div>
+            <div class="proj-info-row">
+              <span class="proj-info-label">Status</span>
+              <span class="proj-info-value" style="color:var(--gold,#d19900);">
+                <i class="bi bi-clock-history"></i> In Progress
+              </span>
+            </div>
+            <a class="btn-swiss" href="index.html#contact">
+              <i class="bi bi-envelope"></i> Discuss this project
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="proj-section">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Overview</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Project overview</h2>
+        <div class="proj-two-col">
+          <div data-aos="fade-up">
+            <p style="color:var(--text-muted); line-height:1.8; font-size:var(--text-base); max-width:none;">
+              This project involves building a compliance-focused dashboard for GST reporting, tracking, and exception analysis. The dashboard provides comprehensive views for liability tracking, filing trend review, and mismatch detection.
+            </p>
+            <p style="color:var(--text-muted); line-height:1.8; font-size:var(--text-base); max-width:none; margin-top:16px;">
+              The solution aims to track GST position and identify filing issues early, enabling proactive compliance management and reducing regulatory risk.
+            </p>
+          </div>
+
+          <div class="problem-card" data-aos="fade-up" data-aos-delay="60">
+            <div class="proj-section-label" style="margin-bottom:14px;">
+              <i class="bi bi-exclamation-circle-fill"></i>&nbsp; Business problem
+            </div>
+            <p style="font-size:var(--text-sm); color:var(--text-muted); margin-bottom:14px; max-width:none; line-height:1.7;">
+              Organizations facing GST compliance challenges need:
+            </p>
+            <ul style="list-style:none; padding:0; margin:0; display:grid; gap:9px;">
+              <li style="display:flex; align-items:flex-start; gap:10px; font-size:var(--text-sm); color:var(--text-muted);">
+                <i class="bi bi-arrow-right-circle-fill" style="color:var(--primary); flex-shrink:0; margin-top:2px;"></i>
+                Real-time visibility of GST liability positions
+              </li>
+              <li style="display:flex; align-items:flex-start; gap:10px; font-size:var(--text-sm); color:var(--text-muted);">
+                <i class="bi bi-arrow-right-circle-fill" style="color:var(--primary); flex-shrink:0; margin-top:2px;"></i>
+                Tracking of filing deadlines and compliance status
+              </li>
+              <li style="display:flex; align-items:flex-start; gap:10px; font-size:var(--text-sm); color:var(--text-muted);">
+                <i class="bi bi-arrow-right-circle-fill" style="color:var(--primary); flex-shrink:0; margin-top:2px;"></i>
+                Early detection of reconciliation mismatches
+              </li>
+              <li style="display:flex; align-items:flex-start; gap:10px; font-size:var(--text-sm); color:var(--text-muted);">
+                <i class="bi bi-arrow-right-circle-fill" style="color:var(--primary); flex-shrink:0; margin-top:2px;"></i>
+                Analysis of filing trends and patterns
+              </li>
+              <li style="display:flex; align-items:flex-start; gap:10px; font-size:var(--text-sm); color:var(--text-muted);">
+                <i class="bi bi-arrow-right-circle-fill" style="color:var(--primary); flex-shrink:0; margin-top:2px;"></i>
+                Exception reporting for audit preparation
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="proj-section" style="background:var(--surface);">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Compliance areas</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Compliance focus areas</h2>
+
+        <div class="focus-grid" data-aos="fade-up">
+          <div class="focus-card">
+            <div class="focus-icon"><i class="bi bi-cash-stack"></i></div>
+            <div class="focus-title">Liability tracking</div>
+            <p class="focus-desc">Monitor GST liability by month, state, and tax type.</p>
+          </div>
+          <div class="focus-card">
+            <div class="focus-icon"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="focus-title">Filing trends</div>
+            <p class="focus-desc">Track filing timeliness and historical patterns.</p>
+          </div>
+          <div class="focus-card">
+            <div class="focus-icon"><i class="bi bi-shuffle"></i></div>
+            <div class="focus-title">Reconciliation</div>
+            <p class="focus-desc">Monthly reconciliation of sales, purchases, and returns.</p>
+          </div>
+          <div class="focus-card">
+            <div class="focus-icon"><i class="bi bi-search"></i></div>
+            <div class="focus-title">Mismatch detection</div>
+            <p class="focus-desc">Identify discrepancies between registers and returns.</p>
+          </div>
+          <div class="focus-card">
+            <div class="focus-icon"><i class="bi bi-bell"></i></div>
+            <div class="focus-title">Exception alerts</div>
+            <p class="focus-desc">Flag filing delays and compliance exceptions.</p>
+          </div>
+          <div class="focus-card">
+            <div class="focus-icon"><i class="bi bi-journal-check"></i></div>
+            <div class="focus-title">Audit support</div>
+            <p class="focus-desc">Provide documentation for GST audits.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="proj-section">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Analysis</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Planned analysis</h2>
+
+        <div class="analysis-tabs" data-aos="fade-up">
+          <button class="analysis-tab active" data-tab="liability">Liability</button>
+          <button class="analysis-tab" data-tab="filing">Filing trends</button>
+          <button class="analysis-tab" data-tab="itc">ITC</button>
+          <button class="analysis-tab" data-tab="exception">Exceptions</button>
+        </div>
+
+        <div class="analysis-panel active" id="tab-liability">
+          <ul class="analysis-list">
+            <li><i class="bi bi-check2-circle"></i>Monthly liability monitoring by tax type (CGST, SGST, IGST) and state.</li>
+            <li><i class="bi bi-check2-circle"></i>Trend review to identify sudden increases and seasonality in tax exposure.</li>
+            <li><i class="bi bi-check2-circle"></i>Liability comparison across periods for compliance planning.</li>
+          </ul>
+        </div>
+
+        <div class="analysis-panel" id="tab-filing">
+          <ul class="analysis-list">
+            <li><i class="bi bi-check2-circle"></i>Historical filing patterns, timeliness tracking, and compliance scoring.</li>
+            <li><i class="bi bi-check2-circle"></i>Deadline adherence review for GSTR-1, GSTR-3B, and GSTR-9.</li>
+            <li><i class="bi bi-check2-circle"></i>Late-filing trend analysis for process improvement.</li>
+          </ul>
+        </div>
+
+        <div class="analysis-panel" id="tab-itc">
+          <ul class="analysis-list">
+            <li><i class="bi bi-check2-circle"></i>Input Tax Credit availability, utilization, and blocking code analysis.</li>
+            <li><i class="bi bi-check2-circle"></i>Comparison of eligible versus claimed ITC for accuracy.</li>
+            <li><i class="bi bi-check2-circle"></i>Utilization pattern analysis to optimize tax positions.</li>
+          </ul>
+        </div>
+
+        <div class="analysis-panel" id="tab-exception">
+          <ul class="analysis-list">
+            <li><i class="bi bi-check2-circle"></i>Identify discrepancies between book sales/purchases and filed GST returns.</li>
+            <li><i class="bi bi-check2-circle"></i>Flag overdue filings, unmatched amounts, and compliance gaps.</li>
+            <li><i class="bi bi-check2-circle"></i>Generate alerts for filing delays and mismatch corrections.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="proj-section" style="background:var(--surface);">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Findings</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Expected key findings</h2>
+
+        <div class="findings-grid">
+          <div class="finding-card">
+            <div class="finding-icon"><i class="bi bi-shield-check"></i></div>
+            <div class="finding-title">Compliance focus</div>
+            <p class="finding-desc">Analysis will focus on compliance tracking and ensuring timely filing adherence across all states.</p>
+          </div>
+          <div class="finding-card">
+            <div class="finding-icon"><i class="bi bi-bug"></i></div>
+            <div class="finding-title">Mismatch detection</div>
+            <p class="finding-desc">Analysis will concentrate on detecting mismatches between book records and filed GST returns for correction.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="proj-section">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Recommendations</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Planned recommendations</h2>
+
+        <div class="rec-grid">
+          <div class="rec-card" data-aos="fade-up">
+            <div class="rec-num">01</div>
+            <div class="rec-title">Set alerts for filing delays</div>
+            <ul class="rec-bullets">
+              <li>Implement automated alerts for upcoming filing deadlines.</li>
+              <li>Flag potential delays before they turn into penalties.</li>
+            </ul>
+          </div>
+
+          <div class="rec-card" data-aos="fade-up" data-aos-delay="50">
+            <div class="rec-num">02</div>
+            <div class="rec-title">Set alerts for mismatches</div>
+            <ul class="rec-bullets">
+              <li>Create mismatch detection alerts.</li>
+              <li>Correct discrepancies before filing final returns.</li>
+            </ul>
+          </div>
+
+          <div class="rec-card" data-aos="fade-up" data-aos-delay="90">
+            <div class="rec-num">03</div>
+            <div class="rec-title">Monthly reconciliation routine</div>
+            <ul class="rec-bullets">
+              <li>Establish a monthly reconciliation process.</li>
+              <li>Catch issues early and reduce manual corrections.</li>
+            </ul>
+          </div>
+
+          <div class="rec-card" data-aos="fade-up" data-aos-delay="120">
+            <div class="rec-num">04</div>
+            <div class="rec-title">Compliance score tracking</div>
+            <ul class="rec-bullets">
+              <li>Monitor compliance score over time.</li>
+              <li>Identify trend patterns and improvement areas.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="proj-section" style="background:var(--surface);">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Tools</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Tools used</h2>
+
+        <div class="tools-row" data-aos="fade-up">
+          <div class="tool-badge"><i class="bi bi-bar-chart-fill"></i>Power BI</div>
+          <div class="tool-badge"><i class="bi bi-layers"></i>Data model</div>
+          <div class="tool-badge"><i class="bi bi-funnel"></i>Filters &amp; slicers</div>
+          <div class="tool-badge"><i class="bi bi-table"></i>Reconciliation tables</div>
+          <div class="tool-badge"><i class="bi bi-bell-fill"></i>Exception alerts</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="proj-section">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Files</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Project files</h2>
+
+        <div class="files-empty" data-aos="fade-up">
+          <i class="bi bi-folder2-open"></i>
+          <div>Files will be available when the project is completed.</div>
+          <div style="font-size:var(--text-xs);">GST Analytics Dashboard Power BI file, data templates, and reconciliation checklists.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="proj-section" style="background:var(--surface);">
+      <div class="wrap">
+        <div class="proj-section-label" data-aos="fade-up">Screenshots</div>
+        <h2 class="proj-section-title" data-aos="fade-up">Dashboard screenshots</h2>
+
+        <p style="color:var(--text-muted); font-size:var(--text-sm); max-width:600px; margin-bottom:28px;" data-aos="fade-up">
+          Screenshots will be added when the project is completed.
+        </p>
+
+        <div class="screenshot-grid" data-aos="fade-up">
+          <div class="screenshot-placeholder">
+            <i class="bi bi-cash-stack"></i>
+            <span>GST Liability Dashboard<br><small>Monthly liability trends</small></span>
+          </div>
+          <div class="screenshot-placeholder">
+            <i class="bi bi-calendar2-check"></i>
+            <span>Filing Compliance Dashboard<br><small>Timeliness tracking</small></span>
+          </div>
+          <div class="screenshot-placeholder">
+            <i class="bi bi-shuffle"></i>
+            <span>Reconciliation Dashboard<br><small>Mismatch highlighting</small></span>
+          </div>
+          <div class="screenshot-placeholder">
+            <i class="bi bi-credit-card-2-front"></i>
+            <span>ITC Utilization Dashboard<br><small>ITC claims and utilization</small></span>
+          </div>
+          <div class="screenshot-placeholder">
+            <i class="bi bi-bell"></i>
+            <span>Exception Alerts Dashboard<br><small>Alerts and compliance gaps</small></span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="proj-next">
+    <div class="wrap">
+      <div class="proj-next-inner">
+        <div>
+          <span class="label-sm">Next project</span>
+          <p style="font-size:var(--text-base); font-weight:600; color:var(--text); margin-bottom:0; margin-top:4px;">
+            Accounts Receivable Aging Analysis
+          </p>
+        </div>
+        <a class="btn-swiss" href="project-ar.html">
+          View next project <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="wrap d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <span>© 2026 Pranshu Agrawal — Financial Analyst Portfolio</span>
+      <div class="d-flex gap-2 flex-wrap">
+        <a class="btn-outline-swiss btn-sm-swiss" href="index.html"><i class="bi bi-house"></i> Home</a>
+        <a class="btn-outline-swiss btn-sm-swiss" href="index.html#projects"><i class="bi bi-grid-3x3-gap"></i> All projects</a>
+        <a class="btn-outline-swiss btn-sm-swiss" href="resume.html"><i class="bi bi-file-earmark-person"></i> Resume</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 520, once: true, offset: 60 });
+
+    (function () {
+      const root = document.documentElement;
+      const toggle = document.querySelector('[data-theme-toggle]');
+      if (!toggle) return;
+      let theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      root.setAttribute('data-theme', theme);
+      function updateIcon() {
+        toggle.innerHTML = theme === 'dark'
+          ? '<i class="bi bi-sun-fill"></i>'
+          : '<i class="bi bi-moon-stars-fill"></i>';
+      }
+      updateIcon();
+      toggle.addEventListener('click', function () {
+        theme = theme === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', theme);
+        updateIcon();
+      });
+    })();
+
+    document.querySelectorAll('.analysis-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.analysis-tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.analysis-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
