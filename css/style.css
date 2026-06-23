@@ -1283,6 +1283,35 @@ h1.hero-name {
 }
 .contact-row i { color: var(--primary); font-size: 1rem; flex-shrink: 0; }
 
+.roles-section {
+  padding-top: 0;
+}
+
+.roles-card {
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--primary) 16%, var(--border));
+  border-radius: var(--r-xl);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+}
+
+.roles-section .section-label {
+  color: var(--primary);
+}
+
+.roles-intro {
+  max-width: 70ch;
+  color: var(--text-muted);
+  line-height: 1.75;
+  margin-bottom: 18px;
+}
+
+.roles-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .open-roles-card {
   border: 1px solid color-mix(in srgb, var(--primary) 18%, var(--border));
   background: color-mix(in srgb, var(--primary) 4%, var(--surface));
