@@ -206,3 +206,21 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
   });
 })();
+document.addEventListener("DOMContentLoaded", function () {
+  const navCollapse = document.getElementById("mainNav");
+  if (!navCollapse) return;
+
+  const bsCollapse = new bootstrap.Collapse(navCollapse, {
+    toggle: false
+  });
+
+  const navLinks = navCollapse.querySelectorAll(".nav-link");
+
+  navLinks.forEach(link => {
+    link.addEventListener("click", function () {
+      if (window.innerWidth < 992) {
+        bsCollapse.hide();
+      }
+    });
+  });
+});
