@@ -415,6 +415,119 @@ table { border-collapse: collapse; width: 100%; }
   border-color: var(--border-strong);
   transform: rotate(18deg);
 }
+.nav-shell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  position: relative;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar-toggler {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: var(--r-md);
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+}
+
+.navbar-toggler i {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
+  outline: 2px solid color-mix(in srgb, var(--primary) 35%, transparent);
+  outline-offset: 2px;
+}
+
+.navbar-collapse {
+  flex-grow: 0;
+}
+
+.navbar-nav {
+  gap: 4px;
+}
+
+.navbar .nav-link {
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  transition: background var(--ease), color var(--ease);
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.nav-cta {
+  margin-left: 16px;
+}
+
+@media (max-width: 991.98px) {
+  .navbar {
+    padding-block: 12px;
+  }
+
+  .navbar-brand {
+    max-width: calc(100% - 120px);
+    font-size: 1rem;
+  }
+
+  .navbar-collapse {
+    width: 100%;
+    margin-top: 14px;
+    padding: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-md);
+  }
+
+  .navbar-nav {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .navbar .nav-link {
+    width: 100%;
+    display: block;
+    text-align: left;
+    background: var(--surface-2);
+  }
+
+  .nav-cta {
+    margin-left: 0;
+    margin-top: 14px;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch !important;
+  }
+
+  .nav-cta .btn-outline-swiss,
+  .nav-cta .theme-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 
 /* =====================================================
    BUTTONS
