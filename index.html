@@ -35,7 +35,7 @@
   </script>
 </head>
 <body>
-  <a href="#hero" class="skip-link">Skip to content</<header class="site-header">
+  <a href="#hero" class="skip-link">Skip to content</header class="site-header">
   <nav class="navbar navbar-expand-lg" aria-label="Main navigation">
     <div class="wrap nav-shell">
       <a class="navbar-brand" href="index.html">
@@ -44,7 +44,7 @@
             <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
           </svg>
         </span>
-        Pranshu Agrawal
+        <span class="brand-text">Pranshu Agrawal</span>
       </a>
 
       <div class="nav-mobile-controls">
@@ -894,6 +894,25 @@ My professional journey is rooted in deep financial literacy and rigorous analys
 
       sections.forEach(section => observer.observe(section));
     })();
+    document.addEventListener("DOMContentLoaded", function () {
+  const navCollapse = document.getElementById("mainNav");
+  if (!navCollapse) return;
+
+  const bsCollapse = new bootstrap.Collapse(navCollapse, {
+    toggle: false
+  });
+
+  const navLinks = navCollapse.querySelectorAll(".nav-link, .btn-outline-swiss");
+
+  navLinks.forEach(link => {
+    link.addEventListener("click", function () {
+      if (window.innerWidth < 992) {
+        bsCollapse.hide();
+      }
+    });
+  });
+});
+
   </script>
 </body>
 </html>
