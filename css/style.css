@@ -1349,10 +1349,10 @@ h1.hero-name {
   100% { transform: translateY(0) rotate(0deg); }
 }
 
-.role-card: hover,
-.role-item: hover,
-.role-pill: hover,
-.role-chip: hover {
+.role-card:hover,
+.role-item:hover,
+.role-pill:hover,
+.role-chip:hover {
   animation: jiggle 0.45s ease-in-out;
   transform-origin: center;
 }
