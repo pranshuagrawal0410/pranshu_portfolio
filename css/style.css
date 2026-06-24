@@ -1365,26 +1365,6 @@ h1.hero-name {
   gap: 10px;
 }
 
-.open-roles-card {
-  border: 1px solid color-mix(in srgb, var(--primary) 18%, var(--border));
-  background: color-mix(in srgb, var(--primary) 4%, var(--surface));
-}
-
-.open-roles-card .section-label {
-  color: var(--primary);
-}
-
-.open-roles-card .text-sm {
-  color: var(--text-muted);
-  line-height: 1.7;
-}
-
-.open-roles-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
 .form-card {
   background: var(--surface);
   border: 1px solid var(--border);
