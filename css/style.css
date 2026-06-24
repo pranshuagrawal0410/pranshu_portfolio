@@ -1725,6 +1725,24 @@ select.form-control { cursor: pointer; }
 [data-aos="fade-up"]   { transform: translateY(16px); }
 [data-aos="fade-left"] { transform: translateX(16px); }
 
+.role-card {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: roleFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.role-card:nth-child(1) { animation-delay: 0.05s; }
+.role-card:nth-child(2) { animation-delay: 0.12s; }
+.role-card:nth-child(3) { animation-delay: 0.19s; }
+.role-card:nth-child(4) { animation-delay: 0.26s; }
+
+@keyframes roleFadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* =====================================================
    RESPONSIVE — Tablet (≤ 991px)
    ===================================================== */
@@ -1784,31 +1802,38 @@ select.form-control { cursor: pointer; }
   100% { transform: translateY(0) rotate(0deg); }
 }
 
-.role-card:hover,
-.role-item:hover,
-.role-pill:hover,
-.role-chip:hover {
-  animation: jiggle 0.45s ease-in-out;
-  transform-origin: center;
+.role-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 26px 28px;
+  transition: transform var(--ease), border-color var(--ease), box-shadow var(--ease), background var(--ease);
 }
 
-.navbar-brand::before,
-.navbar-brand::after,
-.navbar-brand .copyright,
-.navbar-brand .copyright-mark,
-.navbar-brand .copy-icon {
-  content: none !important;
-  display: none !important;
+.role-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 8%, transparent), transparent 55%);
+  opacity: 0;
+  transition: opacity var(--ease);
+  pointer-events: none;
 }
 
-.navbar-brand::before,
-.navbar-brand::after,
-.navbar-brand .copyright,
-.navbar-brand .copyright-mark,
-.navbar-brand .copy-icon {
-  content: none !important;
-  display: none !important;
+.role-card:hover {
+  transform: translateX(3px) translateY(-3px);
+  border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
+  box-shadow: var(--shadow-md);
+  background: var(--surface-2);
 }
+
+.role-card:hover::before {
+  opacity: 1;
+}
+
+
 /* =====================================================
    RESPONSIVE — Small Mobile (≤ 479px)
    ===================================================== */
