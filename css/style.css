@@ -1340,6 +1340,23 @@ h1.hero-name {
   box-shadow: var(--shadow-sm);
 }
 
+@keyframes jiggle {
+  0% { transform: translateY(0) rotate(0deg); }
+  20% { transform: translateY(-1px) rotate(-2deg); }
+  40% { transform: translateY(0) rotate(2deg); }
+  60% { transform: translateY(-1px) rotate(-1deg); }
+  80% { transform: translateY(0) rotate(1deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+.role-card: hover,
+.role-item: hover,
+.role-pill: hover,
+.role-chip: hover {
+  animation: jiggle 0.45s ease-in-out;
+  transform-origin: center;
+}
+
 .form-group { margin-bottom: 16px; }
 
 label {
@@ -1750,6 +1767,48 @@ select.form-control { cursor: pointer; }
   .blog-modal-dialog  { max-height: 90vh; border-radius: var(--r-lg); }
 }
 
+#roles {
+  padding-bottom: clamp(var(--sp-6), 3vw, var(--sp-10)) !important;
+}
+
+#contact {
+  padding-top: clamp(var(--sp-6), 3vw, var(--sp-10)) !important;
+}
+
+@keyframes jiggle {
+  0% { transform: translateY(0) rotate(0deg); }
+  20% { transform: translateY(-1px) rotate(-2deg); }
+  40% { transform: translateY(0) rotate(2deg); }
+  60% { transform: translateY(-1px) rotate(-1deg); }
+  80% { transform: translateY(0) rotate(1deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+.role-card:hover,
+.role-item:hover,
+.role-pill:hover,
+.role-chip:hover {
+  animation: jiggle 0.45s ease-in-out;
+  transform-origin: center;
+}
+
+.navbar-brand::before,
+.navbar-brand::after,
+.navbar-brand .copyright,
+.navbar-brand .copyright-mark,
+.navbar-brand .copy-icon {
+  content: none !important;
+  display: none !important;
+}
+
+.navbar-brand::before,
+.navbar-brand::after,
+.navbar-brand .copyright,
+.navbar-brand .copyright-mark,
+.navbar-brand .copy-icon {
+  content: none !important;
+  display: none !important;
+}
 /* =====================================================
    RESPONSIVE — Small Mobile (≤ 479px)
    ===================================================== */
