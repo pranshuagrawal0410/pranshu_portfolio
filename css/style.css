@@ -37,6 +37,8 @@
   --warning-soft:    #fef3c7;
   --error:           #b71c1c;
   --error-soft:      #fdecea;
+  --planned:         #0B0B45;
+  --planned-soft:    #E6E7F5;
 
   /* --- Borders --- */
   --border:          rgba(17, 19, 17, 0.10);
@@ -558,6 +560,12 @@ table { border-collapse: collapse; width: 100%; }
   border-color: color-mix(in srgb, var(--warning) 22%, transparent);
 }
 
+.chip-planned {
+  background: var(--planned-soft);
+  color: var(--planned);
+  border-color: color-mix(in srgb, var(--planned) 22%, transparent);
+}
+
 .roles-section .roles-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -988,8 +996,21 @@ h1.hero-name {
   letter-spacing: 0.08em;
 }
 
+.projects-top-action {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 28px;
+}
+
+.projects-bottom-action {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
+
 .status-complete { color: var(--success); }
 .status-progress { color: var(--warning); }
+.status-planned  { color: var(--planned); }
 
 /* =====================================================
    SKILLS
