@@ -93,14 +93,14 @@
       align-items: center;
       gap: 12px;
       padding: 14px 20px;
-      background: color-mix(in srgb, var(--warning, #b07a00) 8%, var(--surface));
-      border: 1px solid color-mix(in srgb, var(--warning, #b07a00) 22%, var(--border));
+      background: color-mix(in srgb, var(--planned, #E6E7F5) 8%, var(--surface));
+      border: 1px solid color-mix(in srgb, var(--planned, #0B0B45) 22%, var(--border));
       border-radius: var(--r-lg);
       font-size: var(--text-sm);
       color: var(--text-muted);
       margin-bottom: 28px;
     }
-    .in-progress-banner i { color: var(--gold, #d19900); flex-shrink: 0; font-size: 1.1rem; }
+    .in-progress-banner i { color: var(--planned, #0B0B45); flex-shrink: 0; font-size: 1.1rem; }
 
     .proj-hero-stats {
       display: flex;
@@ -551,11 +551,11 @@
               <span>CMA Projection Model</span>
             </nav>
 
-            <!-- In-progress banner -->
+            <!-- Planned banner -->
             <div class="in-progress-banner" data-aos="fade-up">
               <i class="bi bi-clock-history"></i>
               <span>
-                <strong>In Progress</strong> — This project is currently under development.
+                <strong>In Planned</strong> — This project is currently under Planning Stage.
                 Key features, findings, and screenshots will be added on completion.
               </span>
             </div>
@@ -578,8 +578,8 @@
               <span class="chip">Scenario Analysis</span>
               <span class="chip">Forecasting</span>
               <span class="chip">Lender Reporting</span>
-              <span class="chip" style="background:color-mix(in srgb,var(--gold,#d19900) 12%,var(--surface-2)); border-color:color-mix(in srgb,var(--gold,#d19900) 28%,var(--border)); color:var(--gold,#d19900);">
-                <i class="bi bi-clock"></i>&nbsp; In Progress
+              <span class="chip" style="background:color-mix(in srgb,var(--planned, #0B0B45) 12%,var(--surface-2)); border-color:color-mix(in srgb,var(--planned, #0B0B45) 28%,var(--border)); color:var(--planned, #0B0B45);">
+                <i class="bi bi-clock"></i>&nbsp; Planned
               </span>
             </div>
 
@@ -624,8 +624,8 @@
             </div>
             <div class="proj-info-row">
               <span class="proj-info-label">Status</span>
-              <span class="proj-info-value" style="color:var(--gold,#d19900);">
-                <i class="bi bi-clock-history"></i> In Progress
+              <span class="proj-info-value" style="color:var(--planned, #0B0B45);">
+                <i class="bi bi-clock-history"></i> Planned
               </span>
             </div>
             <a class="btn-swiss" href="index.html#contact">
@@ -915,7 +915,7 @@
         <div class="proj-section-label" data-aos="fade-up">Features</div>
         <h2 class="proj-section-title" data-aos="fade-up">
           Key features
-          <span style="font-size:var(--text-sm); font-weight:500; color:var(--gold,#d19900); margin-left:10px;">
+          <span style="font-size:var(--text-sm); font-weight:500; color:var(--planned, #0B0B45); margin-left:10px;">
             <i class="bi bi-clock-history"></i> Planned
           </span>
         </h2>
@@ -965,7 +965,7 @@
         <div class="proj-section-label" data-aos="fade-up">Expected findings</div>
         <h2 class="proj-section-title" data-aos="fade-up">
           Expected key findings
-          <span style="font-size:var(--text-sm); font-weight:500; color:var(--gold,#d19900); margin-left:10px;">
+          <span style="font-size:var(--text-sm); font-weight:500; color:var(--planned, #0B0B45); margin-left:10px;">
             <i class="bi bi-clock-history"></i> Planned
           </span>
         </h2>
@@ -1016,7 +1016,7 @@
         <div class="proj-section-label" data-aos="fade-up">Recommendations</div>
         <h2 class="proj-section-title" data-aos="fade-up">
           Modeling recommendations
-          <span style="font-size:var(--text-sm); font-weight:500; color:var(--gold,#d19900); margin-left:10px;">
+          <span style="font-size:var(--text-sm); font-weight:500; color:var(--planned, #0B0B45); margin-left:10px;">
             <i class="bi bi-clock-history"></i> Planned
           </span>
         </h2>
@@ -1115,31 +1115,42 @@
               <div class="file-name">CMA Projection Model.xlsx</div>
               <span style="font-size:var(--text-xs); color:var(--text-faint);">Excel workbook — three-statement projection model with scenarios</span>
             </div>
-            <span class="chip" style="margin-left:auto; white-space:nowrap; color:var(--gold,#d19900); border-color:color-mix(in srgb,var(--gold,#d19900) 28%,var(--border));">
-              <i class="bi bi-clock"></i>&nbsp; Pending
-            </span>
-          </div>
-          <div class="file-item">
-            <i class="bi bi-file-earmark-pdf"></i>
-            <div>
-              <div class="file-name">Sample Projection Report.pdf</div>
-              <span style="font-size:var(--text-xs); color:var(--text-faint);">Lender-facing formatted CMA projection report</span>
-            </div>
-            <span class="chip" style="margin-left:auto; white-space:nowrap; color:var(--gold,#d19900); border-color:color-mix(in srgb,var(--gold,#d19900) 28%,var(--border));">
-              <i class="bi bi-clock"></i>&nbsp; Pending
-            </span>
-          </div>
-          <div class="file-item">
-            <i class="bi bi-file-earmark-text"></i>
-            <div>
-              <div class="file-name">Assumption Documentation.xlsx</div>
-              <span style="font-size:var(--text-xs); color:var(--text-faint);">Full documentation of all model inputs and assumptions</span>
-            </div>
-            <span class="chip" style="margin-left:auto; white-space:nowrap; color:var(--gold,#d19900); border-color:color-mix(in srgb,var(--gold,#d19900) 28%,var(--border));">
-              <i class="bi bi-clock"></i>&nbsp; Pending
-            </span>
-          </div>
-        </div>
+<style>
+  :root {
+    --planned: #0B0B45;
+    --planned-soft: #E6E7F5;
+  }
+
+  .chip-planned {
+    margin-left: auto;
+    white-space: nowrap;
+    color: var(--planned);
+    background: var(--planned-soft);
+    border-color: color-mix(in srgb, var(--planned) 28%, var(--border));
+  }
+</style>
+
+<div class="file-item">
+  <i class="bi bi-file-earmark-pdf"></i>
+  <div>
+    <div class="file-name">Sample Projection Report.pdf</div>
+    <span style="font-size:var(--text-xs); color:var(--text-faint);">Lender-facing formatted CMA projection report</span>
+  </div>
+  <span class="chip chip-planned">
+    <i class="bi bi-clock"></i>&nbsp; Pending
+  </span>
+</div>
+
+<div class="file-item">
+  <i class="bi bi-file-earmark-text"></i>
+  <div>
+    <div class="file-name">Assumption Documentation.xlsx</div>
+    <span style="font-size:var(--text-xs); color:var(--text-faint);">Full documentation of all model inputs and assumptions</span>
+  </div>
+  <span class="chip chip-planned">
+    <i class="bi bi-clock"></i>&nbsp; Pending
+  </span>
+</div>
 
         <div class="mt-4" data-aos="fade-up">
           <a class="btn-outline-swiss btn-sm-swiss" href="index.html#contact">
